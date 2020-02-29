@@ -14,7 +14,7 @@ public class HibernateSessionFactoryUtil {
     static {
         try {
             Configuration configuration = new Configuration();
-            configuration.configure("main/java/resources/hibernate.cfg.xml");
+            configuration.configure();
 
             sessionFactory = configuration.buildSessionFactory();
         } catch (Throwable ex) {

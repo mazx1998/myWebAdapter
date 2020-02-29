@@ -41,28 +41,13 @@
     </dependencies>
 
     <build>
-        <outputDirectory>build/</outputDirectory>
-        <resources>
-            <resource>
-                <directory>src/main/resources/</directory>
-                <includes>
-                    <include>*</include>
-                </includes>
-            </resource>
-            <resource>
-                <directory>web</directory>
-                <includes>
-                    <include>*</include>
-                    <include>WEB-INF/*</include>
-                </includes>
-            </resource>
-        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.2.1</version>
                 <configuration>
+                    <warSourceDirectory>src/main/webapp</warSourceDirectory>
                     <attachClasses>true</attachClasses>
                 </configuration>
                 <executions>
