@@ -1,4 +1,4 @@
-package entities;
+package database.entities;
 
 public abstract class MainEntity {
     abstract int getId();

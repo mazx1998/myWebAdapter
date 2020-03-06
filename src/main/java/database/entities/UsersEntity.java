@@ -1,10 +1,12 @@
-package entities;
+package database.entities;
+
+import database.entities.MainEntity;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "users", schema = "public", catalog = "adapterDataBase")
-public class UsersEntityImpl extends MainEntity {
+public class UsersEntity extends MainEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -18,9 +20,9 @@ public class UsersEntityImpl extends MainEntity {
     @Column(name = "hash")
     private String hash;
 
-    public UsersEntityImpl() {}
+    public UsersEntity() {}
 
-    public UsersEntityImpl(String login, String hash) {
+    public UsersEntity(String login, String hash) {
         this.login = login;
         this.hash = hash;
     }

@@ -1,11 +1,11 @@
-package entities;
+package database.entities;
 
 import javax.persistence.*;
 import java.sql.Date;
 
 @Entity
 @Table(name = "requests", schema = "public", catalog = "adapterDataBase")
-public class RequestsEntityImpl extends MainEntity {
+public class RequestsEntity extends MainEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -36,12 +36,12 @@ public class RequestsEntityImpl extends MainEntity {
     private Date reqdate;
 
     @OneToOne(mappedBy = "requestsByReqId")
-    private ResponsesEntityImpl responsesById;
+    private ResponsesEntity responsesById;
 
-    public RequestsEntityImpl() {}
+    public RequestsEntity() {}
 
-    public RequestsEntityImpl(String firstname, String lastname,String patronymic,
-                              String gender, Date birthdate, Date reqdate) {
+    public RequestsEntity(String firstname, String lastname, String patronymic,
+                          String gender, Date birthdate, Date reqdate) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.patronymic = patronymic;
@@ -106,11 +106,11 @@ public class RequestsEntityImpl extends MainEntity {
         this.reqdate = reqdate;
     }
 
-    public ResponsesEntityImpl getResponsesById() {
+    public ResponsesEntity getResponsesById() {
         return responsesById;
     }
 
-    public void setResponsesById(ResponsesEntityImpl responsesById) {
+    public void setResponsesById(ResponsesEntity responsesById) {
         this.responsesById = responsesById;
     }
 

@@ -1,11 +1,11 @@
-package entities;
+package database.entities;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
 @Table(name = "responses", schema = "public", catalog = "adapterDataBase")
-public class ResponsesEntityImpl extends MainEntity {
+public class ResponsesEntity extends MainEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -33,12 +33,12 @@ public class ResponsesEntityImpl extends MainEntity {
 
     @OneToOne
     @JoinColumn(name = "req_id", referencedColumnName = "id")
-    private RequestsEntityImpl requestsByReqId;
+    private RequestsEntity requestsByReqId;
 
-    public ResponsesEntityImpl() {}
+    public ResponsesEntity() {}
 
-    public ResponsesEntityImpl(String snils, String code, String message, String status,
-                               Timestamp respdate, RequestsEntityImpl requestsByReqId) {
+    public ResponsesEntity(String snils, String code, String message, String status,
+                           Timestamp respdate, RequestsEntity requestsByReqId) {
         this.snils = snils;
         this.code = code;
         this.message = message;
@@ -95,11 +95,11 @@ public class ResponsesEntityImpl extends MainEntity {
         this.respdate = respdate;
     }
 
-    public RequestsEntityImpl getRequestsByReqId() {
+    public RequestsEntity getRequestsByReqId() {
         return requestsByReqId;
     }
 
-    public void setRequestsByReqId(RequestsEntityImpl requestsByReqId) {
+    public void setRequestsByReqId(RequestsEntity requestsByReqId) {
         this.requestsByReqId = requestsByReqId;
     }
 
