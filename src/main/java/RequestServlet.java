@@ -1,8 +1,7 @@
-import dao.DataAccessObject;
-import entities.RequestsEntityImpl;
+import database.DataAccessObject;
+import database.entities.RequestsEntity;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,11 +21,11 @@ public class RequestServlet extends HttpServlet {
 
         Date date = new Date(1998, 1, 27);
 
-        DataAccessObject<RequestsEntityImpl> requestDao
-                = new DataAccessObject<RequestsEntityImpl>(RequestsEntityImpl.class);
+        DataAccessObject<RequestsEntity> requestDao
+                = new DataAccessObject<>(RequestsEntity.class);
 
-        RequestsEntityImpl requestsEntity
-                = new RequestsEntityImpl(firstName, lastName, patronymic, "M", date, date);
+        RequestsEntity requestsEntity
+                = new RequestsEntity(firstName, lastName, patronymic, "M", date, date);
         requestDao.create(requestsEntity);
 
 
@@ -42,6 +41,10 @@ public class RequestServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.getWriter().println("GetPage");
+    }
+
+    public static void main(String[] args) {
+
     }
 
 }
