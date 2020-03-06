@@ -6,13 +6,36 @@ import java.sql.Date;
 @Entity
 @Table(name = "requests", schema = "public", catalog = "adapterDataBase")
 public class RequestsEntityImpl extends MainEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
+
+    @Basic
+    @Column(name = "firstname")
     private String firstname;
+
+    @Basic
+    @Column(name = "lastname")
     private String lastname;
+
+    @Basic
+    @Column(name = "patronymic")
     private String patronymic;
+
+    @Basic
+    @Column(name = "gender")
     private String gender;
+
+    @Basic
+    @Column(name = "birthdate")
     private Date birthdate;
+
+    @Basic
+    @Column(name = "reqdate")
     private Date reqdate;
+
+    @OneToOne(mappedBy = "requestsByReqId")
     private ResponsesEntityImpl responsesById;
 
     public RequestsEntityImpl() {}
@@ -27,9 +50,6 @@ public class RequestsEntityImpl extends MainEntity {
         this.reqdate = reqdate;
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     public int getId() {
         return id;
     }
@@ -38,8 +58,6 @@ public class RequestsEntityImpl extends MainEntity {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "firstname")
     public String getFirstname() {
         return firstname;
     }
@@ -48,8 +66,6 @@ public class RequestsEntityImpl extends MainEntity {
         this.firstname = firstname;
     }
 
-    @Basic
-    @Column(name = "lastname")
     public String getLastname() {
         return lastname;
     }
@@ -58,8 +74,6 @@ public class RequestsEntityImpl extends MainEntity {
         this.lastname = lastname;
     }
 
-    @Basic
-    @Column(name = "patronymic")
     public String getPatronymic() {
         return patronymic;
     }
@@ -68,8 +82,6 @@ public class RequestsEntityImpl extends MainEntity {
         this.patronymic = patronymic;
     }
 
-    @Basic
-    @Column(name = "gender")
     public String getGender() {
         return gender;
     }
@@ -78,8 +90,6 @@ public class RequestsEntityImpl extends MainEntity {
         this.gender = gender;
     }
 
-    @Basic
-    @Column(name = "birthdate")
     public Date getBirthdate() {
         return birthdate;
     }
@@ -88,8 +98,6 @@ public class RequestsEntityImpl extends MainEntity {
         this.birthdate = birthdate;
     }
 
-    @Basic
-    @Column(name = "reqdate")
     public Date getReqdate() {
         return reqdate;
     }
@@ -98,37 +106,6 @@ public class RequestsEntityImpl extends MainEntity {
         this.reqdate = reqdate;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        RequestsEntityImpl that = (RequestsEntityImpl) o;
-
-        if (id != that.id) return false;
-        if (firstname != null ? !firstname.equals(that.firstname) : that.firstname != null) return false;
-        if (lastname != null ? !lastname.equals(that.lastname) : that.lastname != null) return false;
-        if (patronymic != null ? !patronymic.equals(that.patronymic) : that.patronymic != null) return false;
-        if (gender != null ? !gender.equals(that.gender) : that.gender != null) return false;
-        if (birthdate != null ? !birthdate.equals(that.birthdate) : that.birthdate != null) return false;
-        if (reqdate != null ? !reqdate.equals(that.reqdate) : that.reqdate != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id;
-        result = 31 * result + (firstname != null ? firstname.hashCode() : 0);
-        result = 31 * result + (lastname != null ? lastname.hashCode() : 0);
-        result = 31 * result + (patronymic != null ? patronymic.hashCode() : 0);
-        result = 31 * result + (gender != null ? gender.hashCode() : 0);
-        result = 31 * result + (birthdate != null ? birthdate.hashCode() : 0);
-        result = 31 * result + (reqdate != null ? reqdate.hashCode() : 0);
-        return result;
-    }
-
-    @OneToOne(mappedBy = "requestsByReqId")
     public ResponsesEntityImpl getResponsesById() {
         return responsesById;
     }

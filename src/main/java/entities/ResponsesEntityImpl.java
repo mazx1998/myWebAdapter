@@ -6,12 +6,33 @@ import java.sql.Timestamp;
 @Entity
 @Table(name = "responses", schema = "public", catalog = "adapterDataBase")
 public class ResponsesEntityImpl extends MainEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
+
+    @Basic
+    @Column(name = "snils")
     private String snils;
+
+    @Basic
+    @Column(name = "code")
     private String code;
+
+    @Basic
+    @Column(name = "message")
     private String message;
+
+    @Basic
+    @Column(name = "status")
     private String status;
+
+    @Basic
+    @Column(name = "respdate")
     private Timestamp respdate;
+
+    @OneToOne
+    @JoinColumn(name = "req_id", referencedColumnName = "id")
     private RequestsEntityImpl requestsByReqId;
 
     public ResponsesEntityImpl() {}
@@ -26,9 +47,6 @@ public class ResponsesEntityImpl extends MainEntity {
         this.requestsByReqId = requestsByReqId;
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     public int getId() {
         return id;
     }
@@ -37,8 +55,6 @@ public class ResponsesEntityImpl extends MainEntity {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "snils")
     public String getSnils() {
         return snils;
     }
@@ -47,8 +63,6 @@ public class ResponsesEntityImpl extends MainEntity {
         this.snils = snils;
     }
 
-    @Basic
-    @Column(name = "code")
     public String getCode() {
         return code;
     }
@@ -57,8 +71,6 @@ public class ResponsesEntityImpl extends MainEntity {
         this.code = code;
     }
 
-    @Basic
-    @Column(name = "message")
     public String getMessage() {
         return message;
     }
@@ -67,8 +79,6 @@ public class ResponsesEntityImpl extends MainEntity {
         this.message = message;
     }
 
-    @Basic
-    @Column(name = "status")
     public String getStatus() {
         return status;
     }
@@ -77,8 +87,6 @@ public class ResponsesEntityImpl extends MainEntity {
         this.status = status;
     }
 
-    @Basic
-    @Column(name = "respdate")
     public Timestamp getRespdate() {
         return respdate;
     }
@@ -87,36 +95,6 @@ public class ResponsesEntityImpl extends MainEntity {
         this.respdate = respdate;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        ResponsesEntityImpl that = (ResponsesEntityImpl) o;
-
-        if (id != that.id) return false;
-        if (snils != null ? !snils.equals(that.snils) : that.snils != null) return false;
-        if (code != null ? !code.equals(that.code) : that.code != null) return false;
-        if (message != null ? !message.equals(that.message) : that.message != null) return false;
-        if (status != null ? !status.equals(that.status) : that.status != null) return false;
-        if (respdate != null ? !respdate.equals(that.respdate) : that.respdate != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id;
-        result = 31 * result + (snils != null ? snils.hashCode() : 0);
-        result = 31 * result + (code != null ? code.hashCode() : 0);
-        result = 31 * result + (message != null ? message.hashCode() : 0);
-        result = 31 * result + (status != null ? status.hashCode() : 0);
-        result = 31 * result + (respdate != null ? respdate.hashCode() : 0);
-        return result;
-    }
-
-    @OneToOne
-    @JoinColumn(name = "req_id", referencedColumnName = "id")
     public RequestsEntityImpl getRequestsByReqId() {
         return requestsByReqId;
     }
