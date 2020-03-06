@@ -6,6 +6,7 @@ import factories.JdbcStatementFactory;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import javax.persistence.Table;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -22,15 +23,17 @@ public class DataAccessObject<T extends MainEntity> {
     }
 
     public T findByField(String field, String fieldValue) {
-        /*Session session = HibernateSessionFactoryUtil.getSession();
-        Criteria criteria = session.createCriteria(UsersEntity.class);
-        UsersEntity foundUser = (UsersEntity)criteria.add(Restrictions.eq("login", name))
-                .uniqueResult();*/
+        final String tableName = type.getAnnotation(Table.class).name();
+
         ResultSet resultSet;
         int rowId = 0;
         try {
             resultSet = JdbcStatementFactory.getStatement()
-                    .executeQuery("SELECT * from users where  "+  field + " = '" + fieldValue + "';");
+                    .executeQuery("SELECT * FROM "
+                            + tableName
+                            + " WHERE  "
+                            +  field
+                            + " = '" + fieldValue + "';");
 
             while (resultSet.next()) {
                 rowId = Integer.parseInt(resultSet.getString("id"));
