@@ -1,21 +1,24 @@
-package dao;
+package database;
 
-import entities.MainEntity;
-import factories.HibernateSessionFactoryUtil;
-import factories.JdbcStatementFactory;
+import database.entities.MainEntity;
+import database.factories.HibernateSessionFactoryUtil;
+import database.factories.JdbcStatementFactory;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import javax.persistence.Table;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 public class DataAccessObject<T extends MainEntity> {
 
     private final Class<T> type;
+    private final String tableName;
 
     public DataAccessObject(Class<T> type) {
         this.type = type;
+        tableName = type.getAnnotation(Table.class).name();
     }
 
     public Class<T> getMyType() {
@@ -23,7 +26,6 @@ public class DataAccessObject<T extends MainEntity> {
     }
 
     public T findByField(String field, String fieldValue) {
-        final String tableName = type.getAnnotation(Table.class).name();
 
         ResultSet resultSet;
         int rowId = 0;
@@ -45,9 +47,18 @@ public class DataAccessObject<T extends MainEntity> {
         return HibernateSessionFactoryUtil.getSession().get(type, rowId);
     }
 
+    public List<T> findAll() {
+        return HibernateSessionFactoryUtil
+                .getSession()
+                .createQuery("select a from " + tableName + " a", type)
+                .getResultList();
+    }
+
     public T findById(int id) {
         return HibernateSessionFactoryUtil.getSession().get(type, id);
     }
+
+
 
     public void create(T obj) {
         Session session = HibernateSessionFactoryUtil.getSession();
