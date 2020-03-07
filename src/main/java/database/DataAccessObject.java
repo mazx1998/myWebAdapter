@@ -50,7 +50,7 @@ public class DataAccessObject<T extends MainEntity> {
     public List<T> findAll() {
         return HibernateSessionFactoryUtil
                 .getSession()
-                .createQuery("select a from " + tableName + " a", type)
+                .createQuery("select a from " + type.getSimpleName() + " a", type)
                 .getResultList();
     }
 
