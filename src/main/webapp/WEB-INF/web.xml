@@ -3,13 +3,15 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
-    
+
     <servlet>
-        <servlet-name>RequestServlet</servlet-name>
-        <servlet-class>RequestServlet</servlet-class>
+        <servlet-name>Jersey Web Application</servlet-name>
+        <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+        <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>
-        <servlet-name>RequestServlet</servlet-name>
-        <url-pattern>/sendReq</url-pattern>
+        <servlet-name>Jersey Web Application</servlet-name>
+        <url-pattern>/jersey/*</url-pattern>
     </servlet-mapping>
+
 </web-app>

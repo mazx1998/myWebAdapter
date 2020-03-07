@@ -104,6 +104,14 @@ public class ResponsesEntity extends MainEntity {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ResponsesEntity that = (ResponsesEntity) o;
+        return id == that.id;
+    }
+
+    @Override
     public String toString() {
         return "ResponsesEntityImpl{" +
                 "id=" + id +
