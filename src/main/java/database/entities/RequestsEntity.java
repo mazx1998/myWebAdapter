@@ -3,6 +3,7 @@ package database.entities;
 import javax.persistence.*;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.Objects;
 
 /**
  * @author Максим Зеленский
@@ -19,6 +20,7 @@ public class RequestsEntity extends MainEntity{
     private Date birthDate;
     private Timestamp reqDate;
     private Timestamp respDate;
+    private String snils;
     private BirthPlacesEntity birthplacesByBirthPlaceId;
     private PassportsEntity passportsByPassportId;
 
@@ -28,6 +30,7 @@ public class RequestsEntity extends MainEntity{
                           String patronymic, String gender,
                           Date birthDate, Timestamp reqDate,
                           Timestamp respDate,
+                          String snils,
                           BirthPlacesEntity birthplacesByBirthPlaceId,
                           PassportsEntity passportsByPassportId) {
         this.firstName = firstName;
@@ -37,6 +40,7 @@ public class RequestsEntity extends MainEntity{
         this.birthDate = birthDate;
         this.reqDate = reqDate;
         this.respDate = respDate;
+        this.snils = snils;
         this.birthplacesByBirthPlaceId = birthplacesByBirthPlaceId;
         this.passportsByPassportId = passportsByPassportId;
     }
@@ -122,25 +126,15 @@ public class RequestsEntity extends MainEntity{
         this.respDate = respDate;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        RequestsEntity that = (RequestsEntity) o;
-
-        if (id != that.id) return false;
-        if (firstName != null ? !firstName.equals(that.firstName) : that.firstName != null) return false;
-        if (lastName != null ? !lastName.equals(that.lastName) : that.lastName != null) return false;
-        if (patronymic != null ? !patronymic.equals(that.patronymic) : that.patronymic != null) return false;
-        if (gender != null ? !gender.equals(that.gender) : that.gender != null) return false;
-        if (birthDate != null ? !birthDate.equals(that.birthDate) : that.birthDate != null) return false;
-        if (reqDate != null ? !reqDate.equals(that.reqDate) : that.reqDate != null) return false;
-        if (respDate != null ? !respDate.equals(that.respDate) : that.respDate != null) return false;
-
-        return true;
+    @Basic
+    @Column(name = "snils")
+    public String getSnils() {
+        return snils;
     }
 
+    public void setSnils(String snils) {
+        this.snils = snils;
+    }
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "birth_place_id", referencedColumnName = "id")
@@ -161,4 +155,26 @@ public class RequestsEntity extends MainEntity{
     public void setPassportsByPassportId(PassportsEntity passportsByPassportId) {
         this.passportsByPassportId = passportsByPassportId;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        RequestsEntity that = (RequestsEntity) o;
+
+        if (id != that.id) return false;
+        if (!Objects.equals(firstName, that.firstName)) return false;
+        if (!Objects.equals(lastName, that.lastName)) return false;
+        if (!Objects.equals(patronymic, that.patronymic)) return false;
+        if (!Objects.equals(gender, that.gender)) return false;
+        if (!Objects.equals(birthDate, that.birthDate)) return false;
+        if (!Objects.equals(reqDate, that.reqDate)) return false;
+        if (!Objects.equals(respDate, that.respDate)) return false;
+
+        return true;
+    }
+
+
+
 }

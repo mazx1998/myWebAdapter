@@ -23,7 +23,8 @@ create table requests(
         constraint requests_passport_id_fkey
             references  passports,
     req_date timestamp not null,
-    resp_date timestamp
+    resp_date timestamp,
+    snils varchar(15)
 );
 
 create table birthplaces(

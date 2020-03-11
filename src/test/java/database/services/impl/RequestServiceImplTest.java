@@ -38,6 +38,7 @@ public class RequestServiceImplTest {
                 new Date(2000, 1, 1),
                 new Timestamp(11111),
                 new Timestamp(11111),
+            null,
             testBirthPlaceEntity,
             testPassportEntity);
 
@@ -108,6 +109,7 @@ public class RequestServiceImplTest {
                 testRequestEntity.getBirthDate(),
                 testRequestEntity.getReqDate(),
                 testRequestEntity.getRespDate(),
+                testRequestEntity.getSnils(),
                 testRequestEntity.getBirthplacesByBirthPlaceId(),
                 testRequestEntity.getPassportsByPassportId()
         );
