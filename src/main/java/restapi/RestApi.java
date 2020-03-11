@@ -1,9 +1,5 @@
 package restapi;
 
-import database.entities.RequestsEntity;
-import database.services.RequestService;
-import database.services.impl.RequestServiceImpl;
-
 import javax.servlet.ServletContext;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
