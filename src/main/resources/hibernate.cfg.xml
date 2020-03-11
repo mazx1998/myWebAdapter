@@ -12,8 +12,10 @@
         <property name="connection.password">postgres</property>
         <property name="show_sql">true</property>
         <property name="hibernate.hbm2ddl.auto">update</property>
-        <mapping class="database.entities.RequestsEntity"/>
-        <mapping class="database.entities.ResponsesEntity"/>
         <mapping class="database.entities.UsersEntity"/>
+        <mapping class="database.entities.BirthPlacesEntity"/>
+        <mapping class="database.entities.PassportsEntity"/>
+        <mapping class="database.entities.RequestsEntity"/>
     </session-factory>
 </hibernate-configuration>
+<session-factory>

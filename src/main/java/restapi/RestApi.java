@@ -46,7 +46,7 @@ public class RestApi {
                                 @FormParam("gender") String gender,
                                 @FormParam("birthDate") Date birthDate) {
 
-        RequestsEntity requestsEntity
+     /*   RequestsEntity requestEntity
             = new RequestsEntity(
                     firstName,
                     lastName,
@@ -58,7 +58,7 @@ public class RestApi {
 
 
         RequestService requestService = new RequestServiceImpl();
-        requestService.create(requestsEntity);
+        requestService.create(requestEntity);*/
     }
 
     @GET

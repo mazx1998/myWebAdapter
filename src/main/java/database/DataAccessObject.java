@@ -5,7 +5,6 @@ import database.utils.HibernateSessionUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import javax.persistence.Table;
 import java.util.List;
 
 public class DataAccessObject<T extends MainEntity> {

@@ -1,6 +1,9 @@
 package database.services.impl;
 
+import database.entities.BirthPlacesEntity;
+import database.entities.PassportsEntity;
 import database.entities.RequestsEntity;
+import database.services.RequestService;
 import database.utils.HibernateSessionUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -8,17 +11,35 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 
 public class RequestServiceImplTest {
-    private final RequestServiceImpl requestServiceTest = new RequestServiceImpl();
+    private final RequestService requestServiceTest = new RequestServiceImpl();
+
+    private final BirthPlacesEntity testBirthPlaceEntity = new BirthPlacesEntity(
+            "ОСОБОЕ",
+            "ГОРОД",
+            "РАЙОН",
+            "РЕГИОН",
+            "СТРАНА"
+    );
+    private final PassportsEntity testPassportEntity = new PassportsEntity(
+            "11111",
+            "121313",
+            new Date(1012),
+            "ISSUER"
+    );
     private final RequestsEntity testRequestEntity
                 = new RequestsEntity("testName",
                 "testLastName",
                 "testPatronymic",
                 "Мужской",
                 new Date(2000, 1, 1),
-                new Date(2000, 1, 1));
+                new Timestamp(11111),
+                new Timestamp(11111),
+            testBirthPlaceEntity,
+            testPassportEntity);
 
     @Test
     public void create() {
@@ -47,9 +68,9 @@ public class RequestServiceImplTest {
         //Add record that will find
         requestServiceTest.create(testRequestEntity);
         // Start 'getById' method
-        RequestsEntity testRequestsEntity1 =  requestServiceTest.getById(testRequestEntity.getId());
+        RequestsEntity testRequestEntity1 =  requestServiceTest.getById(testRequestEntity.getId());
         // If found object and object from data base are equal
-        if (testRequestsEntity1.equals(testRequestEntity)) {
+        if (testRequestEntity1.equals(testRequestEntity)) {
             actual = true;
         }
         // Remove created
@@ -80,16 +101,19 @@ public class RequestServiceImplTest {
     public void update() {
         //Add record that we will change
         RequestsEntity testRequestEntity1 = new RequestsEntity(
-                testRequestEntity.getFirstname(),
-                testRequestEntity.getLastname(),
+                testRequestEntity.getFirstName(),
+                testRequestEntity.getLastName(),
                 testRequestEntity.getPatronymic(),
                 testRequestEntity.getGender(),
-                testRequestEntity.getBirthdate(),
-                testRequestEntity.getReqdate()
+                testRequestEntity.getBirthDate(),
+                testRequestEntity.getReqDate(),
+                testRequestEntity.getRespDate(),
+                testRequestEntity.getBirthplacesByBirthPlaceId(),
+                testRequestEntity.getPassportsByPassportId()
         );
         requestServiceTest.create(testRequestEntity1);
         // Change firstName in object
-        testRequestEntity1.setFirstname("AnotherFirstName");
+        testRequestEntity1.setFirstName("AnotherFirstName");
         // Try update it in data base
         Session session = HibernateSessionUtil.getSession();
         Transaction transaction = session.beginTransaction();
@@ -100,7 +124,7 @@ public class RequestServiceImplTest {
         RequestsEntity testRequestEntity2
                 = requestServiceTest.getById(testRequestEntity1.getId());
         // Compare firstNames
-        boolean actual = testRequestEntity1.getFirstname().equals(testRequestEntity2.getFirstname());
+        boolean actual = testRequestEntity1.getFirstName().equals(testRequestEntity2.getFirstName());
 
         // Remove created
         session = HibernateSessionUtil.getSession();

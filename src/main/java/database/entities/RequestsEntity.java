@@ -2,67 +2,48 @@ package database.entities;
 
 import javax.persistence.*;
 import java.sql.Date;
-import java.util.Objects;
+import java.sql.Timestamp;
 
+/**
+ * @author Максим Зеленский
+ * @since 11.03.2020
+ */
 @Entity
 @Table(name = "requests", schema = "public", catalog = "adapterDataBase")
-public class RequestsEntity extends MainEntity {
+public class RequestsEntity extends MainEntity{
+    private int id;
+    private String firstName;
+    private String lastName;
+    private String patronymic;
+    private String gender;
+    private Date birthDate;
+    private Timestamp reqDate;
+    private Timestamp respDate;
+    private BirthPlacesEntity birthplacesByBirthPlaceId;
+    private PassportsEntity passportsByPassportId;
+
+    public RequestsEntity() { }
+
+    public RequestsEntity(String firstName, String lastName,
+                          String patronymic, String gender,
+                          Date birthDate, Timestamp reqDate,
+                          Timestamp respDate,
+                          BirthPlacesEntity birthplacesByBirthPlaceId,
+                          PassportsEntity passportsByPassportId) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.patronymic = patronymic;
+        this.gender = gender;
+        this.birthDate = birthDate;
+        this.reqDate = reqDate;
+        this.respDate = respDate;
+        this.birthplacesByBirthPlaceId = birthplacesByBirthPlaceId;
+        this.passportsByPassportId = passportsByPassportId;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
-
-    @Basic
-    @Column(name = "firstname")
-    private String firstname;
-
-    @Basic
-    @Column(name = "lastname")
-    private String lastname;
-
-    @Basic
-    @Column(name = "patronymic")
-    private String patronymic;
-
-    @Basic
-    @Column(name = "gender")
-    private String gender;
-
-    @Basic
-    @Column(name = "birthdate")
-    private Date birthdate;
-
-    @Basic
-    @Column(name = "reqdate")
-    private Date reqdate;
-
-    @OneToOne(mappedBy = "requestsByReqId")
-    private ResponsesEntity responsesById;
-
-    public RequestsEntity() {}
-
-    public RequestsEntity(String firstname, String lastname, String patronymic,
-                          String gender, Date birthdate, Date reqdate) {
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.patronymic = patronymic;
-
-        if (gender.equals("Мужской")) {
-            this.gender = "M";
-        } else if (gender.equals("Женский")) {
-            this.gender = "F";
-        } else {
-            try {
-                throw new Exception(" Incorrect gender value. ");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        this.birthdate = birthdate;
-        this.reqdate = reqdate;
-    }
-
     public int getId() {
         return id;
     }
@@ -71,22 +52,28 @@ public class RequestsEntity extends MainEntity {
         this.id = id;
     }
 
-    public String getFirstname() {
-        return firstname;
+    @Basic
+    @Column(name = "first_name")
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getLastname() {
-        return lastname;
+    @Basic
+    @Column(name = "last_name")
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
+    @Basic
+    @Column(name = "patronymic")
     public String getPatronymic() {
         return patronymic;
     }
@@ -95,6 +82,8 @@ public class RequestsEntity extends MainEntity {
         this.patronymic = patronymic;
     }
 
+    @Basic
+    @Column(name = "gender")
     public String getGender() {
         return gender;
     }
@@ -103,49 +92,73 @@ public class RequestsEntity extends MainEntity {
         this.gender = gender;
     }
 
-    public Date getBirthdate() {
-        return birthdate;
+    @Basic
+    @Column(name = "birth_date")
+    public Date getBirthDate() {
+        return birthDate;
     }
 
-    public void setBirthdate(Date birthdate) {
-        this.birthdate = birthdate;
+    public void setBirthDate(Date birthDate) {
+        this.birthDate = birthDate;
     }
 
-    public Date getReqdate() {
-        return reqdate;
+    @Basic
+    @Column(name = "req_date")
+    public Timestamp getReqDate() {
+        return reqDate;
     }
 
-    public void setReqdate(Date reqdate) {
-        this.reqdate = reqdate;
+    public void setReqDate(Timestamp reqDate) {
+        this.reqDate = reqDate;
     }
 
-    public ResponsesEntity getResponsesById() {
-        return responsesById;
+    @Basic
+    @Column(name = "resp_date")
+    public Timestamp getRespDate() {
+        return respDate;
     }
 
-    public void setResponsesById(ResponsesEntity responsesById) {
-        this.responsesById = responsesById;
+    public void setRespDate(Timestamp respDate) {
+        this.respDate = respDate;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         RequestsEntity that = (RequestsEntity) o;
-        return id == that.id;
+
+        if (id != that.id) return false;
+        if (firstName != null ? !firstName.equals(that.firstName) : that.firstName != null) return false;
+        if (lastName != null ? !lastName.equals(that.lastName) : that.lastName != null) return false;
+        if (patronymic != null ? !patronymic.equals(that.patronymic) : that.patronymic != null) return false;
+        if (gender != null ? !gender.equals(that.gender) : that.gender != null) return false;
+        if (birthDate != null ? !birthDate.equals(that.birthDate) : that.birthDate != null) return false;
+        if (reqDate != null ? !reqDate.equals(that.reqDate) : that.reqDate != null) return false;
+        if (respDate != null ? !respDate.equals(that.respDate) : that.respDate != null) return false;
+
+        return true;
     }
 
-    @Override
-    public String toString() {
-        return "RequestsEntityImpl{" +
-                "id=" + id +
-                ", firstname='" + firstname + '\'' +
-                ", lastname='" + lastname + '\'' +
-                ", patronymic='" + patronymic + '\'' +
-                ", gender='" + gender + '\'' +
-                ", birthdate=" + birthdate +
-                ", reqdate=" + reqdate +
-                ", responsesById=" + responsesById +
-                '}';
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "birth_place_id", referencedColumnName = "id")
+    public BirthPlacesEntity getBirthplacesByBirthPlaceId() {
+        return birthplacesByBirthPlaceId;
+    }
+
+    public void setBirthplacesByBirthPlaceId(BirthPlacesEntity birthplacesByBirthPlaceId) {
+        this.birthplacesByBirthPlaceId = birthplacesByBirthPlaceId;
+    }
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "passport_id", referencedColumnName = "id")
+    public PassportsEntity getPassportsByPassportId() {
+        return passportsByPassportId;
+    }
+
+    public void setPassportsByPassportId(PassportsEntity passportsByPassportId) {
+        this.passportsByPassportId = passportsByPassportId;
     }
 }

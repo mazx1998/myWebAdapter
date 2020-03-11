@@ -1,32 +1,29 @@
 package database.entities;
 
-import database.entities.MainEntity;
-
 import javax.persistence.*;
 
+/**
+ * @author Максим Зеленский
+ * @since 11.03.2020
+ */
 @Entity
 @Table(name = "users", schema = "public", catalog = "adapterDataBase")
-public class UsersEntity extends MainEntity {
+public class UsersEntity extends MainEntity{
+    private int id;
+    private String login;
+    private String password;
+
+    public UsersEntity() {
+    }
+
+    public UsersEntity(String login, String password) {
+        this.login = login;
+        this.password = password;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
-
-    @Basic
-    @Column(name = "login")
-    private String login;
-
-    @Basic
-    @Column(name = "hash")
-    private String hash;
-
-    public UsersEntity() {}
-
-    public UsersEntity(String login, String hash) {
-        this.login = login;
-        this.hash = hash;
-    }
-
     public int getId() {
         return id;
     }
@@ -35,6 +32,8 @@ public class UsersEntity extends MainEntity {
         this.id = id;
     }
 
+    @Basic
+    @Column(name = "login")
     public String getLogin() {
         return login;
     }
@@ -43,28 +42,35 @@ public class UsersEntity extends MainEntity {
         this.login = login;
     }
 
-    public String getHash() {
-        return hash;
+    @Basic
+    @Column(name = "password")
+    public String getPassword() {
+        return password;
     }
 
-    public void setHash(String hash) {
-        this.hash = hash;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         UsersEntity that = (UsersEntity) o;
-        return id == that.id;
+
+        if (id != that.id) return false;
+        if (login != null ? !login.equals(that.login) : that.login != null) return false;
+        if (password != null ? !password.equals(that.password) : that.password != null) return false;
+
+        return true;
     }
 
     @Override
-    public String toString() {
-        return "UsersEntityImpl{" +
-                "id=" + id +
-                ", login='" + login + '\'' +
-                ", hash='" + hash + '\'' +
-                '}';
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + (login != null ? login.hashCode() : 0);
+        result = 31 * result + (password != null ? password.hashCode() : 0);
+        return result;
     }
 }
