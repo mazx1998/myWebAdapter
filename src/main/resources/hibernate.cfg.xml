@@ -4,6 +4,8 @@
         "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
     <session-factory>
+        <!--Check-->
+        <!--<property name="hibernate.connection.datasource">jdbc:</property>-->
         <property name="connection.url">jdbc:postgresql://localhost:5432/adapterDataBase</property>
         <property name="connection.driver_class">org.postgresql.Driver</property>
         <property name="connection.username">postgres</property>

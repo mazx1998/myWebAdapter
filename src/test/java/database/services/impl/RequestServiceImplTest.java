@@ -1,7 +1,7 @@
 package database.services.impl;
 
 import database.entities.RequestsEntity;
-import database.factories.HibernateSessionFactoryUtil;
+import database.utils.HibernateSessionUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.junit.Assert;
@@ -16,7 +16,7 @@ public class RequestServiceImplTest {
                 = new RequestsEntity("testName",
                 "testLastName",
                 "testPatronymic",
-                "G",
+                "Мужской",
                 new Date(2000, 1, 1),
                 new Date(2000, 1, 1));
 
@@ -26,13 +26,13 @@ public class RequestServiceImplTest {
         // Start 'create' method
         requestServiceTest.create(testRequestEntity);
         // If record was created in data base
-        if (HibernateSessionFactoryUtil
+        if (HibernateSessionUtil
                 .getSession()
                 .get(RequestsEntity.class, testRequestEntity.getId()) != null) {
             actual = true;
 
             // Remove created
-            Session session = HibernateSessionFactoryUtil.getSession();
+            Session session = HibernateSessionUtil.getSession();
             Transaction transaction = session.beginTransaction();
             session.delete(testRequestEntity);
             transaction.commit();
@@ -53,7 +53,7 @@ public class RequestServiceImplTest {
             actual = true;
         }
         // Remove created
-        Session session = HibernateSessionFactoryUtil.getSession();
+        Session session = HibernateSessionUtil.getSession();
         Transaction transaction = session.beginTransaction();
         session.delete(testRequestEntity);
         transaction.commit();
@@ -65,7 +65,7 @@ public class RequestServiceImplTest {
     public void getAll() {
         // Get all requests entities using Hibernate session factory
         List<RequestsEntity> testList =
-                HibernateSessionFactoryUtil.getSession()
+                HibernateSessionUtil.getSession()
                 .createQuery("SELECT a from RequestsEntity a", RequestsEntity.class)
                 .getResultList();
         // Get all requests entities using method 'getAll'
@@ -91,7 +91,7 @@ public class RequestServiceImplTest {
         // Change firstName in object
         testRequestEntity1.setFirstname("AnotherFirstName");
         // Try update it in data base
-        Session session = HibernateSessionFactoryUtil.getSession();
+        Session session = HibernateSessionUtil.getSession();
         Transaction transaction = session.beginTransaction();
         session.update(testRequestEntity1);
         transaction.commit();
@@ -103,7 +103,7 @@ public class RequestServiceImplTest {
         boolean actual = testRequestEntity1.getFirstname().equals(testRequestEntity2.getFirstname());
 
         // Remove created
-        session = HibernateSessionFactoryUtil.getSession();
+        session = HibernateSessionUtil.getSession();
         transaction = session.beginTransaction();
         session.delete(testRequestEntity1);
         transaction.commit();
