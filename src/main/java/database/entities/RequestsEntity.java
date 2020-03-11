@@ -46,7 +46,19 @@ public class RequestsEntity extends MainEntity {
         this.firstname = firstname;
         this.lastname = lastname;
         this.patronymic = patronymic;
-        this.gender = gender;
+
+        if (gender.equals("Мужской")) {
+            this.gender = "M";
+        } else if (gender.equals("Женский")) {
+            this.gender = "F";
+        } else {
+            try {
+                throw new Exception(" Incorrect gender value. ");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
         this.birthdate = birthdate;
         this.reqdate = reqdate;
     }

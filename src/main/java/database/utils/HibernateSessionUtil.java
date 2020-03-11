@@ -1,11 +1,11 @@
-package database.factories;
+package database.utils;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-public class HibernateSessionFactoryUtil {
+public class HibernateSessionUtil {
     private static final SessionFactory sessionFactory;
 
     static {

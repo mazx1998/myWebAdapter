@@ -3,6 +3,7 @@ package database.services.impl;
 import database.DataAccessObject;
 import database.entities.UsersEntity;
 import database.services.UsersService;
+import exceptions.MoreThanOneLoginException;
 
 import java.util.List;
 
@@ -14,8 +15,12 @@ public class UsersServiceImpl implements UsersService {
     private final DataAccessObject<UsersEntity> dao = new DataAccessObject<>(UsersEntity.class);
 
     @Override
-    public UsersEntity findByLogin(String login) {
-        return dao.findByField("login", login);
+    public UsersEntity findByLogin(String login) throws MoreThanOneLoginException {
+        List<UsersEntity> foundUsers = dao.findByField("login", login);
+        if (foundUsers.size() != 1) {
+            throw new MoreThanOneLoginException("Logins is unique field. It cant have more than one equal values");
+        }
+        return foundUsers.get(0);
     }
 
     @Override
