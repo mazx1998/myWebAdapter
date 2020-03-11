@@ -1,6 +1,7 @@
 package database.entities;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 /**
  * @author Максим Зеленский
@@ -60,8 +61,8 @@ public class UsersEntity extends MainEntity{
         UsersEntity that = (UsersEntity) o;
 
         if (id != that.id) return false;
-        if (login != null ? !login.equals(that.login) : that.login != null) return false;
-        if (password != null ? !password.equals(that.password) : that.password != null) return false;
+        if (!Objects.equals(login, that.login)) return false;
+        if (!Objects.equals(password, that.password)) return false;
 
         return true;
     }

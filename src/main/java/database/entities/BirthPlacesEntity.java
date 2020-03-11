@@ -1,6 +1,7 @@
 package database.entities;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 /**
  * @author Максим Зеленский
@@ -98,11 +99,11 @@ public class BirthPlacesEntity extends MainEntity{
         BirthPlacesEntity that = (BirthPlacesEntity) o;
 
         if (id != that.id) return false;
-        if (placeType != null ? !placeType.equals(that.placeType) : that.placeType != null) return false;
-        if (settlement != null ? !settlement.equals(that.settlement) : that.settlement != null) return false;
-        if (district != null ? !district.equals(that.district) : that.district != null) return false;
-        if (region != null ? !region.equals(that.region) : that.region != null) return false;
-        if (country != null ? !country.equals(that.country) : that.country != null) return false;
+        if (!Objects.equals(placeType, that.placeType)) return false;
+        if (!Objects.equals(settlement, that.settlement)) return false;
+        if (!Objects.equals(district, that.district)) return false;
+        if (!Objects.equals(region, that.region)) return false;
+        if (!Objects.equals(country, that.country)) return false;
 
         return true;
     }

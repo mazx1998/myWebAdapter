@@ -2,6 +2,7 @@ package database.entities;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.Objects;
 
 /**
  * @author Максим Зеленский
@@ -86,10 +87,10 @@ public class PassportsEntity extends MainEntity {
         PassportsEntity that = (PassportsEntity) o;
 
         if (id != that.id) return false;
-        if (series != null ? !series.equals(that.series) : that.series != null) return false;
-        if (number != null ? !number.equals(that.number) : that.number != null) return false;
-        if (issueDate != null ? !issueDate.equals(that.issueDate) : that.issueDate != null) return false;
-        if (issuer != null ? !issuer.equals(that.issuer) : that.issuer != null) return false;
+        if (!Objects.equals(series, that.series)) return false;
+        if (!Objects.equals(number, that.number)) return false;
+        if (!Objects.equals(issueDate, that.issueDate)) return false;
+        if (!Objects.equals(issuer, that.issuer)) return false;
 
         return true;
     }
