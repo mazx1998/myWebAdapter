@@ -10,5 +10,6 @@ import java.util.List;
  * @since 06.03.2020
  */
 public interface RequestService extends EntityService<RequestsEntity> {
-    List<RequestsEntity> getByFilter(RequestFilterPojo filter);
+    List<RequestsEntity> getDataByFilter(RequestFilterPojo filter);
+    Integer getRowsCountByFilter(RequestFilterPojo filter);
 }

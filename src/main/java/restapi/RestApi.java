@@ -3,6 +3,7 @@ package restapi;
 import database.entities.RequestsEntity;
 import database.services.RequestService;
 import database.services.impl.RequestServiceImpl;
+import org.json.JSONObject;
 import restapi.authorization.Roles;
 import restapi.pojo.RequestFilterPojo;
 import restapi.pojo.RequestPojo;
@@ -51,10 +52,8 @@ public class RestApi {
     */
     public Response getRequestListWithFilter(RequestFilterPojo filter) {
         RequestService requestService = new RequestServiceImpl();
-
         List<RequestsEntity> requestsEntities;
-        requestsEntities = requestService.getByFilter(filter);
-
+        requestsEntities = requestService.getDataByFilter(filter);
         if (requestsEntities == null) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
@@ -64,4 +63,20 @@ public class RestApi {
         return Response.status(200).entity(requestPojos).build();
     }
 
+    @GET
+    @Path("/reqCount")
+    @RolesAllowed({Roles.ADMIN, Roles.USER})
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response getRequestsCount(RequestFilterPojo filter) {
+        RequestService requestService = new RequestServiceImpl();
+        Integer rowsCount = requestService.getRowsCountByFilter(filter);
+        if (rowsCount == null) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("rows_count", rowsCount);
+        return Response.status(200).entity(jsonObject.toString()).build();
+    }
 }

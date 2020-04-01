@@ -32,7 +32,17 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public List<RequestsEntity> getByFilter(RequestFilterPojo filter) {
+    public List<RequestsEntity> getDataByFilter(RequestFilterPojo filter) {
+        return extractDataUsingFilter(filter).data;
+    }
+
+    @Override
+    public Integer getRowsCountByFilter(RequestFilterPojo filter) {
+        return extractDataUsingFilter(filter).dataCount;
+    }
+
+    private DataGotWithFilter extractDataUsingFilter(RequestFilterPojo filter) {
+        DataGotWithFilter dataGotWithFilter = new DataGotWithFilter();
         String firstName = filter.getFirst_name();
         String lastName = filter.getLast_name();
         String patronymic = filter.getPatronymic();
@@ -54,18 +64,46 @@ public class RequestServiceImpl implements RequestService {
 
         // if all of names is null
         if (firstName == null && lastName == null && patronymic == null) {
-            return dao.findAll(pageNumber, pageSize);
+            dataGotWithFilter.data = dao.findAll(pageNumber, pageSize);
+            if (dataGotWithFilter.data != null) {
+                dataGotWithFilter.dataCount = dataGotWithFilter.data.size();
+            }
+            else {
+                dataGotWithFilter.dataCount = null;
+            }
+            return dataGotWithFilter;
         }
 
         // If just one of names is not null
         if (firstName != null && lastName == null && patronymic == null) {
-            return dao.findByFieldLimited(FIRST_NAME_FIELD, firstName, pageNumber, pageSize);
+            dataGotWithFilter.data = dao.findByFieldLimited(FIRST_NAME_FIELD, firstName, pageNumber, pageSize);
+            if (dataGotWithFilter.data != null) {
+                dataGotWithFilter.dataCount = dataGotWithFilter.data.size();
+            }
+            else {
+                dataGotWithFilter.dataCount = null;
+            }
+            return dataGotWithFilter;
         }
         if (firstName == null && lastName != null && patronymic == null) {
-            return dao.findByFieldLimited(LAST_NAME_FIELD, lastName, pageNumber, pageSize);
+            dataGotWithFilter.data = dao.findByFieldLimited(LAST_NAME_FIELD, lastName, pageNumber, pageSize);
+            if (dataGotWithFilter.data != null) {
+                dataGotWithFilter.dataCount = dataGotWithFilter.data.size();
+            }
+            else {
+                dataGotWithFilter.dataCount = null;
+            }
+            return dataGotWithFilter;
         }
         if (firstName == null && lastName == null && patronymic != null) {
-            return dao.findByFieldLimited(PATRONYMIC_FIELD, patronymic, pageNumber, pageSize);
+            dataGotWithFilter.data = dao.findByFieldLimited(PATRONYMIC_FIELD, patronymic, pageNumber, pageSize);
+            if (dataGotWithFilter.data != null) {
+                dataGotWithFilter.dataCount = dataGotWithFilter.data.size();
+            }
+            else {
+                dataGotWithFilter.dataCount = null;
+            }
+            return dataGotWithFilter;
         }
 
         // if minimum two of names is not null
@@ -81,7 +119,36 @@ public class RequestServiceImpl implements RequestService {
             fields.add(PATRONYMIC_FIELD);
             values.add(patronymic);
         }
-        return dao.findByFields(fields, values, pageNumber, pageSize);
+
+        dataGotWithFilter.data = dao.findByFields(fields, values, pageNumber, pageSize);
+        if (dataGotWithFilter.data != null) {
+            dataGotWithFilter.dataCount = dataGotWithFilter.data.size();
+        }
+        else {
+            dataGotWithFilter.dataCount = null;
+        }
+        return dataGotWithFilter;
+    }
+
+    private class DataGotWithFilter {
+        private List<RequestsEntity> data;
+        private Integer dataCount;
+
+        public List<RequestsEntity> getData() {
+            return data;
+        }
+
+        public void setData(List<RequestsEntity> data) {
+            this.data = data;
+        }
+
+        public int getDataCount() {
+            return dataCount;
+        }
+
+        public void setDataCount(Integer dataCount) {
+            this.dataCount = dataCount;
+        }
     }
 
     @Override
