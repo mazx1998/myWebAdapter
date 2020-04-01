@@ -85,13 +85,17 @@ public class RequestServiceImplTest {
 
     @Test
     public void getAll() {
+        int pageNumber = 1;
+        int pageSize = 20;
         // Get all requests entities using Hibernate session factory
         List<RequestsEntity> testList =
                 HibernateSessionUtil.getSession()
-                .createQuery("SELECT a from RequestsEntity a", RequestsEntity.class)
+                .createQuery("from RequestsEntity", RequestsEntity.class)
+                .setFirstResult((pageNumber - 1) * pageSize)
+                .setMaxResults(pageSize)
                 .getResultList();
         // Get all requests entities using method 'getAll'
-        List<RequestsEntity> testList2 = requestServiceTest.getAll();
+        List<RequestsEntity> testList2 = requestServiceTest.getAll(pageNumber, pageSize);
         // Compare lists
         boolean actual = testList.equals(testList2);
 
@@ -150,5 +154,12 @@ public class RequestServiceImplTest {
         boolean actual = testRequestEntity1 == null;
 
         Assert.assertTrue(actual);
+    }
+
+    @Test
+    public void sandbox() {
+        List<RequestsEntity> requestsEntities;
+        requestsEntities = requestServiceTest.getByFullName("Максим", null, null);
+        System.out.println(requestsEntities.size());
     }
 }

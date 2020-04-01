@@ -9,7 +9,8 @@ import java.util.List;
 public interface EntityService<T> {
     void create(T obj);
     T getById(int id);
-    List<T> getAll();
+    List<T> getAll(int pageNumber, int pageSize);
+    long getRowsCount();
     void update(T obj);
     void delete(T obj);
 }

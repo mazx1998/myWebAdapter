@@ -174,7 +174,4 @@ public class RequestsEntity extends MainEntity{
 
         return true;
     }
-
-
-
 }

@@ -4,7 +4,8 @@ create table users(
         constraint users_pkey
             primary key,
     login varchar(50) not null,
-    password varchar(50) not null
+    password varchar(50) not null,
+    role varchar(50) not null
 );
 
 create table requests(

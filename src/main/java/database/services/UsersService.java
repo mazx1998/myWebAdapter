@@ -1,12 +1,13 @@
 package database.services;
 
 import database.entities.UsersEntity;
-import exceptions.MoreThanOneLoginException;
+import exceptions.DataBaseException;
+import exceptions.TwinLoginException;
 
 /**
  * @author Максим Зеленский
  * @since 06.03.2020
  */
 public interface UsersService extends EntityService<UsersEntity> {
-    UsersEntity findByLogin(String login) throws MoreThanOneLoginException;
+    UsersEntity findByLogin(String login) throws DataBaseException;
 }

@@ -1,6 +1,7 @@
 package database.entities;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Objects;
 
 /**
@@ -13,6 +14,7 @@ public class UsersEntity extends MainEntity{
     private int id;
     private String login;
     private String password;
+    private String role;
 
     public UsersEntity() {
     }
@@ -53,6 +55,16 @@ public class UsersEntity extends MainEntity{
         this.password = password;
     }
 
+    @Basic
+    @Column(name = "role")
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -65,13 +77,5 @@ public class UsersEntity extends MainEntity{
         if (!Objects.equals(password, that.password)) return false;
 
         return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id;
-        result = 31 * result + (login != null ? login.hashCode() : 0);
-        result = 31 * result + (password != null ? password.hashCode() : 0);
-        return result;
     }
 }

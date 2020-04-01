@@ -1,7 +1,9 @@
 package database.services.impl;
 
 import database.entities.UsersEntity;
-import exceptions.MoreThanOneLoginException;
+import exceptions.DataBaseException;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -18,7 +20,7 @@ public class UsersServiceImplTest {
         UsersEntity testUsersEntity2 = null;
         try {
             testUsersEntity2 = usersServiceTest.findByLogin(testUsersEntity.getLogin());
-        } catch (MoreThanOneLoginException e) {
+        } catch (DataBaseException e) {
             e.printStackTrace();
         }
 
@@ -27,5 +29,10 @@ public class UsersServiceImplTest {
         if (testUsersEntity2 != null) {
             usersServiceTest.delete(testUsersEntity);
         }
+    }
+
+    @Test
+    public void sandbox() {
+        System.out.println(usersServiceTest.getRowsCount());
     }
 }

@@ -1,6 +1,7 @@
 package database.entities;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.sql.Date;
 import java.util.Objects;
 
@@ -94,5 +95,4 @@ public class PassportsEntity extends MainEntity {
 
         return true;
     }
-
 }

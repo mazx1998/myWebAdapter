@@ -27,11 +27,45 @@ public class DataAccessObject<T extends MainEntity> {
                 .getResultList();
     }
 
-    public List<T> findAll() {
-        return HibernateSessionUtil
-                .getSession()
-                .createQuery("select e from " + type.getSimpleName() + " e", type)
-                .getResultList();
+    public List<T> findByFields(List<String> fields, List<String> fieldValues) {
+        StringBuilder query = new StringBuilder("select e from ");
+        query.append(type.getSimpleName());
+        query.append(" e WHERE ");
+        for (int i = 0; i < fields.size(); i++) {
+            query.append("e.").append(fields.get(i))
+                 .append(" = '").append(fieldValues.get(i));
+
+            if (i < fields.size() - 1) {
+                query.append("' AND ");
+            } else {
+                query.append("'");
+            }
+        }
+
+        try {
+            return HibernateSessionUtil
+                    .getSession()
+                    .createQuery(query.toString(), type)
+                    .getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public List<T> findAll(int pageNumber, int pageSize) {
+        try {
+            return HibernateSessionUtil
+                    .getSession()
+                    .createQuery("from " + type.getSimpleName(), type)
+                    .setFirstResult((pageNumber - 1) * pageSize)
+                    .setMaxResults(pageSize)
+                    .getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
     }
 
     public T findById(int id) {
@@ -65,5 +99,14 @@ public class DataAccessObject<T extends MainEntity> {
         session.delete(obj);
         transaction.commit();
         session.close();
+    }
+
+    public long getRowsCount() {
+        return  (Long)
+                HibernateSessionUtil
+                .getSession()
+                .createQuery("select count(*) from " + type.getSimpleName())
+                .iterate()
+                .next();
     }
 }
