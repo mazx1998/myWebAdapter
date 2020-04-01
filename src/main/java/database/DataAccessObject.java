@@ -27,7 +27,22 @@ public class DataAccessObject<T extends MainEntity> {
                 .getResultList();
     }
 
-    public List<T> findByFields(List<String> fields, List<String> fieldValues) {
+    public List<T> findByFieldLimited(String field, String fieldValue, int pageNumber, int pageSize) {
+        try {
+            return HibernateSessionUtil
+                    .getSession()
+                    .createQuery("select e from " + type.getSimpleName() + " e " +
+                            "WHERE e." + field + " = '" + fieldValue + "'", type)
+                    .setFirstResult((pageNumber - 1) * pageSize)
+                    .setMaxResults(pageSize)
+                    .getResultList();
+        }  catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public List<T> findByFields(List<String> fields, List<String> fieldValues, int pageNumber, int pageSize) {
         StringBuilder query = new StringBuilder("select e from ");
         query.append(type.getSimpleName());
         query.append(" e WHERE ");
@@ -46,6 +61,8 @@ public class DataAccessObject<T extends MainEntity> {
             return HibernateSessionUtil
                     .getSession()
                     .createQuery(query.toString(), type)
+                    .setFirstResult((pageNumber - 1) * pageSize)
+                    .setMaxResults(pageSize)
                     .getResultList();
         } catch (Exception e) {
             e.printStackTrace();

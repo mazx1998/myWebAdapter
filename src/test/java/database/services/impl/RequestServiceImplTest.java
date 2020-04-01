@@ -158,8 +158,6 @@ public class RequestServiceImplTest {
 
     @Test
     public void sandbox() {
-        List<RequestsEntity> requestsEntities;
-        requestsEntities = requestServiceTest.getByFullName("Максим", null, null);
-        System.out.println(requestsEntities.size());
+
     }
 }

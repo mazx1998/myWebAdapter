@@ -3,6 +3,7 @@ package database.services.impl;
 import database.DataAccessObject;
 import database.entities.RequestsEntity;
 import database.services.RequestService;
+import restapi.pojo.RequestFilterPojo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,9 @@ public class RequestServiceImpl implements RequestService {
     private final String FIRST_NAME_FIELD = "firstName";
     private final String LAST_NAME_FIELD = "lastName";
     private final String PATRONYMIC_FIELD = "patronymic";
+    private final int DEFAULT_PAGE_NUMBER = 1;
+    private final int DEFAULT_PAGE_SIZE = 10;
+    private final int DEFAULT_MAX_PAGE_SIZE = 20;
     private final DataAccessObject<RequestsEntity> dao = new DataAccessObject<>(RequestsEntity.class);
 
     @Override
@@ -28,24 +32,40 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public List<RequestsEntity> getByFullName(String firstName, String lastName, String patronymic) {
+    public List<RequestsEntity> getByFilter(RequestFilterPojo filter) {
+        String firstName = filter.getFirst_name();
+        String lastName = filter.getLast_name();
+        String patronymic = filter.getPatronymic();
+        Integer pageNumber = filter.getPage_number();
+        Integer pageSize = filter.getPage_size();
+
+        if (pageNumber == null) {
+            pageNumber = DEFAULT_PAGE_NUMBER;
+        }
+        if (pageSize == null) {
+            pageSize = DEFAULT_PAGE_SIZE;
+        }
+        if (pageSize > 20) {
+            pageSize = DEFAULT_MAX_PAGE_SIZE;
+        }
+
         List<String> fields = new ArrayList<>();
         List<String> values = new ArrayList<>();
 
         // if all of names is null
         if (firstName == null && lastName == null && patronymic == null) {
-            return null;
+            return dao.findAll(pageNumber, pageSize);
         }
 
         // If just one of names is not null
         if (firstName != null && lastName == null && patronymic == null) {
-            return dao.findByField(FIRST_NAME_FIELD, firstName);
+            return dao.findByFieldLimited(FIRST_NAME_FIELD, firstName, pageNumber, pageSize);
         }
         if (firstName == null && lastName != null && patronymic == null) {
-            return dao.findByField(LAST_NAME_FIELD, lastName);
+            return dao.findByFieldLimited(LAST_NAME_FIELD, lastName, pageNumber, pageSize);
         }
         if (firstName == null && lastName == null && patronymic != null) {
-            return dao.findByField(PATRONYMIC_FIELD, patronymic);
+            return dao.findByFieldLimited(PATRONYMIC_FIELD, patronymic, pageNumber, pageSize);
         }
 
         // if minimum two of names is not null
@@ -61,7 +81,7 @@ public class RequestServiceImpl implements RequestService {
             fields.add(PATRONYMIC_FIELD);
             values.add(patronymic);
         }
-        return dao.findByFields(fields, values);
+        return dao.findByFields(fields, values, pageNumber, pageSize);
     }
 
     @Override
