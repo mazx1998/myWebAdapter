@@ -1,12 +1,17 @@
 package restapi;
 
+import database.entities.BirthPlacesEntity;
+import database.entities.PassportsEntity;
 import database.entities.RequestsEntity;
 import database.services.RequestService;
 import database.services.impl.RequestServiceImpl;
+import exceptions.NotAllFieldsAreFilledException;
 import org.json.JSONObject;
 import restapi.authorization.Roles;
 import restapi.pojo.RequestFilterPojo;
-import restapi.pojo.RequestPojo;
+import restapi.pojo.request.in.RequestInPojo;
+import restapi.pojo.request.out.RequestOutPojo;
+import restapi.utils.Validator;
 
 import javax.annotation.security.RolesAllowed;
 import javax.servlet.ServletContext;
@@ -14,6 +19,8 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -58,9 +65,9 @@ public class RestApi {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
 
-        List<RequestPojo> requestPojos = new LinkedList<>();
-        requestsEntities.forEach(requestsEntity -> requestPojos.add(new RequestPojo(requestsEntity)));
-        return Response.status(200).entity(requestPojos).build();
+        List<RequestOutPojo> requestOutPojos = new LinkedList<>();
+        requestsEntities.forEach(requestsEntity -> requestOutPojos.add(new RequestOutPojo(requestsEntity)));
+        return Response.status(200).entity(requestOutPojos).build();
     }
 
     @GET
@@ -79,4 +86,103 @@ public class RestApi {
         jsonObject.put("rows_count", rowsCount);
         return Response.status(200).entity(jsonObject.toString()).build();
     }
+
+    @GET
+    @Path("/createRequest")
+    @RolesAllowed({Roles.ADMIN, Roles.USER})
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response createRequest(RequestInPojo request) {
+        try {
+            Validator.requestIsValid(request);
+        } catch (NotAllFieldsAreFilledException e) {
+            e.printStackTrace();
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
+        PassportsEntity passportData = null;
+        BirthPlacesEntity birthPlacesData = null;
+        // If we dont have passport data
+        if (request.getNumber() == null) {
+            birthPlacesData = new BirthPlacesEntity(
+                    request.getPlace_type(),
+                    request.getSettlement(),
+                    request.getDistrict(),
+                    request.getRegion(),
+                    request.getCountry()
+            );
+        }
+        // If we have birth places data
+        else if (request.getSettlement() == null){
+            passportData = new PassportsEntity(
+                    request.getSeries(),
+                    request.getNumber(),
+                    new Date(request.getIssue_date()),
+                    request.getIssuer()
+            );
+        }
+        // If all exists
+        else {
+            passportData = new PassportsEntity(
+                    request.getSeries(),
+                    request.getNumber(),
+                    new Date(request.getIssue_date()),
+                    request.getIssuer()
+            );
+            birthPlacesData = new BirthPlacesEntity(
+                    request.getPlace_type(),
+                    request.getSettlement(),
+                    request.getDistrict(),
+                    request.getRegion(),
+                    request.getCountry()
+            );
+        }
+
+        RequestsEntity requestsEntity = new RequestsEntity(
+                request.getFirst_name(),
+                request.getLast_name(),
+                request.getPatronymic(),
+                request.getGender(),
+                new Date(request.getBirth_date()),
+                new Timestamp(request.getRequest_date()),
+                new Timestamp(request.getResponse_date()),
+                request.getSnils(),
+                birthPlacesData,
+                passportData
+        );
+
+        try {
+            RequestService requestService = new RequestServiceImpl();
+            requestService.create(requestsEntity);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
+        return Response.status(200).build();
+    }
+
+    /*
+    {
+        "first_name": "Максим",
+        "last_name": "Зеленский",
+        "patronymic": "Сергеевич",
+        "gender": "Мужской",
+        "birth_date": 886269600000,
+        "request_date": 1585573975000,
+        "response_date": 1585649577000,
+        "snils": "1234567",
+
+    	"place_type": "ОСОБЕННОЕ",
+    	"settlement": "ГОРОД",
+    	"district": "РАЙОН",
+    	"region": "РЕГИОН",
+        "country": "СТРАНА",
+
+        "series": "65421",
+        "number": "12442",
+        "issue_date": 1490806800000,
+        "issuer": "УФМС РОССИИ"
+    }
+    */
 }

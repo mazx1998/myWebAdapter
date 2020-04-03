@@ -1,4 +1,4 @@
-package restapi.pojo;
+package restapi.pojo.request.out;
 
 import database.entities.BirthPlacesEntity;
 

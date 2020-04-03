@@ -69,20 +69,12 @@
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->
+        <!-- MD5 -->
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
             <version>1.14</version>
         </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-search -->
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-search</artifactId>
-            <version>5.11.5.Final</version>
-            <type>pom</type>
-        </dependency>
-
 
     </dependencies>
 

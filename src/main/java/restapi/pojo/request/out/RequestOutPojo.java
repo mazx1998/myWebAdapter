@@ -1,29 +1,28 @@
-package restapi.pojo;
+package restapi.pojo.request.out;
 
-import database.entities.BirthPlacesEntity;
 import database.entities.RequestsEntity;
 
 /**
  * @author Максим Зеленский
  * @since 30.03.2020
  */
-public class RequestPojo {
+public class RequestOutPojo {
     private int id;
     private String first_name;
     private String last_name;
     private String patronymic;
     private String gender;
-    private long birth_date;
-    private long request_date;
-    private long response_date;
+    private Long birth_date;
+    private Long request_date;
+    private Long response_date;
     private String snils;
     private BirthPlacesPojo birth_places;
     private PassportsPojo passport_data;
 
-    public RequestPojo() {
+    public RequestOutPojo() {
     }
 
-    public RequestPojo(RequestsEntity requestsEntity) {
+    public RequestOutPojo(RequestsEntity requestsEntity) {
         id = requestsEntity.getId();
         first_name = requestsEntity.getFirstName();
         last_name = requestsEntity.getLastName();
@@ -77,27 +76,27 @@ public class RequestPojo {
         this.gender = gender;
     }
 
-    public long getBirth_date() {
+    public Long getBirth_date() {
         return birth_date;
     }
 
-    public void setBirth_date(long birth_date) {
+    public void setBirth_date(Long birth_date) {
         this.birth_date = birth_date;
     }
 
-    public long getRequest_date() {
+    public Long getRequest_date() {
         return request_date;
     }
 
-    public void setRequest_date(long request_date) {
+    public void setRequest_date(Long request_date) {
         this.request_date = request_date;
     }
 
-    public long getResponse_date() {
+    public Long getResponse_date() {
         return response_date;
     }
 
-    public void setResponse_date(long response_date) {
+    public void setResponse_date(Long response_date) {
         this.response_date = response_date;
     }
 

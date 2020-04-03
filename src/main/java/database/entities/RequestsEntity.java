@@ -1,5 +1,7 @@
 package database.entities;
 
+import restapi.pojo.request.out.RequestOutPojo;
+
 import javax.persistence.*;
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -43,6 +45,19 @@ public class RequestsEntity extends MainEntity{
         this.snils = snils;
         this.birthplacesByBirthPlaceId = birthplacesByBirthPlaceId;
         this.passportsByPassportId = passportsByPassportId;
+    }
+
+    public RequestsEntity(RequestOutPojo requestOutPojo) {
+        this.firstName = requestOutPojo.getFirst_name();
+        this.lastName = requestOutPojo.getLast_name();
+        this.patronymic = requestOutPojo.getPatronymic();
+        this.gender = requestOutPojo.getGender();
+        this.birthDate.setTime(requestOutPojo.getBirth_date());
+        this.reqDate.setTime(requestOutPojo.getRequest_date());
+        this.respDate.setTime(requestOutPojo.getResponse_date());
+        this.snils = requestOutPojo.getSnils();
+        this.birthplacesByBirthPlaceId = new BirthPlacesEntity(requestOutPojo.getBirth_places());
+        this.passportsByPassportId = new PassportsEntity(requestOutPojo.getPassport_data());
     }
 
     @Id

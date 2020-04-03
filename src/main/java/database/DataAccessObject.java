@@ -89,8 +89,6 @@ public class DataAccessObject<T extends MainEntity> {
         return HibernateSessionUtil.getSession().get(type, id);
     }
 
-
-
     public void create(T obj) {
         Session session = HibernateSessionUtil.getSession();
         Transaction transaction = session.beginTransaction();

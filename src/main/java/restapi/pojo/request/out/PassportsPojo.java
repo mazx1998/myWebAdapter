@@ -1,4 +1,4 @@
-package restapi.pojo;
+package restapi.pojo.request.out;
 
 import database.entities.PassportsEntity;
 
@@ -10,7 +10,7 @@ public class PassportsPojo {
     private int id;
     private String series;
     private String number;
-    private long issue_date;
+    private Long issue_date;
     private String issuer;
 
     public PassportsPojo() {
@@ -48,11 +48,11 @@ public class PassportsPojo {
         this.number = number;
     }
 
-    public long getIssue_date() {
+    public Long getIssue_date() {
         return issue_date;
     }
 
-    public void setIssue_date(long issue_date) {
+    public void setIssue_date(Long issue_date) {
         this.issue_date = issue_date;
     }
 

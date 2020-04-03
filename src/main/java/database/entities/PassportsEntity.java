@@ -1,7 +1,8 @@
 package database.entities;
 
+import restapi.pojo.request.out.PassportsPojo;
+
 import javax.persistence.*;
-import javax.xml.bind.annotation.XmlRootElement;
 import java.sql.Date;
 import java.util.Objects;
 
@@ -27,6 +28,13 @@ public class PassportsEntity extends MainEntity {
         this.number = number;
         this.issueDate = issueDate;
         this.issuer = issuer;
+    }
+
+    public PassportsEntity(PassportsPojo passportsPojo) {
+        this.series = passportsPojo.getSeries();
+        this.number = passportsPojo.getNumber();
+        this.issueDate.setTime(passportsPojo.getIssue_date());
+        this.issuer = passportsPojo.getIssuer();
     }
 
     @Id

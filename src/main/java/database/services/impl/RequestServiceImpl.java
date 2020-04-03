@@ -133,22 +133,6 @@ public class RequestServiceImpl implements RequestService {
     private class DataGotWithFilter {
         private List<RequestsEntity> data;
         private Integer dataCount;
-
-        public List<RequestsEntity> getData() {
-            return data;
-        }
-
-        public void setData(List<RequestsEntity> data) {
-            this.data = data;
-        }
-
-        public int getDataCount() {
-            return dataCount;
-        }
-
-        public void setDataCount(Integer dataCount) {
-            this.dataCount = dataCount;
-        }
     }
 
     @Override
