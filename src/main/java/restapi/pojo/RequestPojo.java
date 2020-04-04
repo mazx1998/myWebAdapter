@@ -3,10 +3,6 @@ package restapi.pojo;
 import database.entities.BirthPlacesEntity;
 import database.entities.PassportsEntity;
 import database.entities.RequestsEntity;
-import exceptions.NotAllFieldsAreFilledException;
-import org.json.JSONObject;
-
-import javax.json.JsonObject;
 
 /**
  * @author Максим Зеленский
@@ -29,10 +25,10 @@ public class RequestPojo {
     private String region;      // nullable
     private String country;     // nullable
 
-    private String series;
-    private String number;
-    private Long issue_date;
-    private String issuer;      // nullable
+    private String passport_series;
+    private String passport_number;
+    private Long passport_issue_date;
+    private String passport_issuer;      // nullable
 
     public RequestPojo() {
     }
@@ -67,11 +63,11 @@ public class RequestPojo {
         // If request have passport data
         if (requestsEntity.getPassportsByPassportId() != null) {
             PassportsEntity passportData = requestsEntity.getPassportsByPassportId();
-            series = passportData.getSeries();
-            number = passportData.getNumber();
-            issue_date = passportData.getIssueDate().getTime();
+            passport_series = passportData.getSeries();
+            passport_number = passportData.getNumber();
+            passport_issue_date = passportData.getIssueDate().getTime();
             if (passportData.getIssuer() != null)
-                issuer = passportData.getIssuer();
+                passport_issuer = passportData.getIssuer();
         }
 
     }
@@ -188,35 +184,35 @@ public class RequestPojo {
         this.country = country;
     }
 
-    public String getSeries() {
-        return series;
+    public String getPassport_series() {
+        return passport_series;
     }
 
-    public void setSeries(String series) {
-        this.series = series;
+    public void setPassport_series(String passport_series) {
+        this.passport_series = passport_series;
     }
 
-    public String getNumber() {
-        return number;
+    public String getPassport_number() {
+        return passport_number;
     }
 
-    public void setNumber(String number) {
-        this.number = number;
+    public void setPassport_number(String passport_number) {
+        this.passport_number = passport_number;
     }
 
-    public Long getIssue_date() {
-        return issue_date;
+    public Long getPassport_issue_date() {
+        return passport_issue_date;
     }
 
-    public void setIssue_date(Long issue_date) {
-        this.issue_date = issue_date;
+    public void setPassport_issue_date(Long passport_issue_date) {
+        this.passport_issue_date = passport_issue_date;
     }
 
-    public String getIssuer() {
-        return issuer;
+    public String getPassport_issuer() {
+        return passport_issuer;
     }
 
-    public void setIssuer(String issuer) {
-        this.issuer = issuer;
+    public void setPassport_issuer(String passport_issuer) {
+        this.passport_issuer = passport_issuer;
     }
 }

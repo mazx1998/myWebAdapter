@@ -83,12 +83,12 @@ public class RequestsEntity extends MainEntity{
         this.birthplacesByBirthPlaceId = birthPlacesData;
 
         PassportsEntity passportData = null;
-        if (requestPojo.getNumber() != null) {
+        if (requestPojo.getPassport_number() != null) {
             passportData = new PassportsEntity(
-                   requestPojo.getSeries(),
-                   requestPojo.getNumber(),
-                   new Date(requestPojo.getIssue_date()),
-                   requestPojo.getIssuer()
+                   requestPojo.getPassport_series(),
+                   requestPojo.getPassport_number(),
+                   new Date(requestPojo.getPassport_issue_date()),
+                   requestPojo.getPassport_issuer()
             );
         }
         this.passportsByPassportId = passportData;

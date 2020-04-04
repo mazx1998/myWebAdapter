@@ -15,8 +15,8 @@ public class Validator {
             throw new NotAllFieldsAreFilledException("Some of not null fields in request was not filled");
         }
 
-        if (request.getSeries() == null || request.getIssue_date() == null ||
-            request.getNumber() == null || request.getIssuer() == null) {
+        if (request.getPassport_series() == null || request.getPassport_issue_date() == null ||
+            request.getPassport_number() == null || request.getPassport_issuer() == null) {
             if (request.getPlace_type() == null || request.getSettlement() == null) {
                 throw new NotAllFieldsAreFilledException("Some of not null fields like passport or birth place data in request was not filled");
             }
