@@ -1,7 +1,5 @@
 package database.entities;
 
-import restapi.pojo.request.out.BirthPlacesPojo;
-
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -30,14 +28,6 @@ public class BirthPlacesEntity extends MainEntity{
         this.district = district;
         this.region = region;
         this.country = country;
-    }
-
-    public BirthPlacesEntity(BirthPlacesPojo birthPlacesPojo) {
-        this.placeType = birthPlacesPojo.getPlace_type();
-        this.settlement = birthPlacesPojo.getSettlement();
-        this.district = birthPlacesPojo.getDistrict();
-        this.region = birthPlacesPojo.getRegion();
-        this.country = birthPlacesPojo.getCountry();
     }
 
     @Id

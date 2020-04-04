@@ -6,11 +6,11 @@ import database.entities.RequestsEntity;
 import database.services.RequestService;
 import database.services.impl.RequestServiceImpl;
 import exceptions.NotAllFieldsAreFilledException;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import restapi.authorization.Roles;
 import restapi.pojo.RequestFilterPojo;
-import restapi.pojo.request.in.RequestInPojo;
-import restapi.pojo.request.out.RequestOutPojo;
+import restapi.pojo.RequestPojo;
 import restapi.utils.Validator;
 
 import javax.annotation.security.RolesAllowed;
@@ -65,9 +65,12 @@ public class RestApi {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
 
-        List<RequestOutPojo> requestOutPojos = new LinkedList<>();
-        requestsEntities.forEach(requestsEntity -> requestOutPojos.add(new RequestOutPojo(requestsEntity)));
-        return Response.status(200).entity(requestOutPojos).build();
+        List<RequestPojo> requestsPojo = new LinkedList<>();
+        requestsEntities.forEach(requestsEntity -> {
+            requestsPojo.add(new RequestPojo(requestsEntity));
+        });
+
+        return Response.status(200).entity(requestsPojo).build();
     }
 
     @GET
@@ -92,7 +95,7 @@ public class RestApi {
     @RolesAllowed({Roles.ADMIN, Roles.USER})
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createRequest(RequestInPojo request) {
+    public Response createRequest(RequestPojo request) {
         try {
             Validator.requestIsValid(request);
         } catch (NotAllFieldsAreFilledException e) {
@@ -100,61 +103,11 @@ public class RestApi {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
 
-        PassportsEntity passportData = null;
-        BirthPlacesEntity birthPlacesData = null;
-        // If we dont have passport data
-        if (request.getNumber() == null) {
-            birthPlacesData = new BirthPlacesEntity(
-                    request.getPlace_type(),
-                    request.getSettlement(),
-                    request.getDistrict(),
-                    request.getRegion(),
-                    request.getCountry()
-            );
-        }
-        // If we have birth places data
-        else if (request.getSettlement() == null){
-            passportData = new PassportsEntity(
-                    request.getSeries(),
-                    request.getNumber(),
-                    new Date(request.getIssue_date()),
-                    request.getIssuer()
-            );
-        }
-        // If all exists
-        else {
-            passportData = new PassportsEntity(
-                    request.getSeries(),
-                    request.getNumber(),
-                    new Date(request.getIssue_date()),
-                    request.getIssuer()
-            );
-            birthPlacesData = new BirthPlacesEntity(
-                    request.getPlace_type(),
-                    request.getSettlement(),
-                    request.getDistrict(),
-                    request.getRegion(),
-                    request.getCountry()
-            );
-        }
-
-        RequestsEntity requestsEntity = new RequestsEntity(
-                request.getFirst_name(),
-                request.getLast_name(),
-                request.getPatronymic(),
-                request.getGender(),
-                new Date(request.getBirth_date()),
-                new Timestamp(request.getRequest_date()),
-                new Timestamp(request.getResponse_date()),
-                request.getSnils(),
-                birthPlacesData,
-                passportData
-        );
+        RequestsEntity requestsEntity = new RequestsEntity(request);
 
         try {
             RequestService requestService = new RequestServiceImpl();
             requestService.create(requestsEntity);
-
             //TODO send request to SMEV
         } catch (Exception e) {
             e.printStackTrace();

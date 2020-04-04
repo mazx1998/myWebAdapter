@@ -1,6 +1,6 @@
 package database.entities;
 
-import restapi.pojo.request.out.RequestOutPojo;
+import restapi.pojo.RequestPojo;
 
 import javax.persistence.*;
 import java.sql.Date;
@@ -47,17 +47,51 @@ public class RequestsEntity extends MainEntity{
         this.passportsByPassportId = passportsByPassportId;
     }
 
-    public RequestsEntity(RequestOutPojo requestOutPojo) {
-        this.firstName = requestOutPojo.getFirst_name();
-        this.lastName = requestOutPojo.getLast_name();
-        this.patronymic = requestOutPojo.getPatronymic();
-        this.gender = requestOutPojo.getGender();
-        this.birthDate.setTime(requestOutPojo.getBirth_date());
-        this.reqDate.setTime(requestOutPojo.getRequest_date());
-        this.respDate.setTime(requestOutPojo.getResponse_date());
-        this.snils = requestOutPojo.getSnils();
-        this.birthplacesByBirthPlaceId = new BirthPlacesEntity(requestOutPojo.getBirth_places());
-        this.passportsByPassportId = new PassportsEntity(requestOutPojo.getPassport_data());
+    public RequestsEntity(RequestPojo requestPojo) {
+        this.firstName = requestPojo.getFirst_name();
+        this.lastName = requestPojo.getLast_name();
+        if (requestPojo.getPatronymic() != null)
+            this.patronymic = requestPojo.getPatronymic();
+        this.gender = requestPojo.getGender();
+        this.birthDate = new Date(requestPojo.getBirth_date());
+        this.reqDate = new Timestamp(requestPojo.getRequest_date());
+        if (requestPojo.getResponse_date() != null)
+            this.respDate = new Timestamp(requestPojo.getResponse_date());
+        if (requestPojo.getSnils() != null)
+            this.snils = requestPojo.getSnils();
+
+        BirthPlacesEntity birthPlacesData = null;
+        if (requestPojo.getPlace_type() != null) {
+            String district = null;
+            String region = null;
+            String country = null;
+            if (requestPojo.getDistrict() != null)
+                district = requestPojo.getDistrict();
+            if (requestPojo.getRegion() != null)
+                region = requestPojo.getRegion();
+            if (requestPojo.getCountry() != null)
+                country = requestPojo.getCountry();
+
+            birthPlacesData = new BirthPlacesEntity(
+                    requestPojo.getPlace_type(),
+                    requestPojo.getSettlement(),
+                    district,
+                    region,
+                    country
+            );
+        }
+        this.birthplacesByBirthPlaceId = birthPlacesData;
+
+        PassportsEntity passportData = null;
+        if (requestPojo.getNumber() != null) {
+            passportData = new PassportsEntity(
+                   requestPojo.getSeries(),
+                   requestPojo.getNumber(),
+                   new Date(requestPojo.getIssue_date()),
+                   requestPojo.getIssuer()
+            );
+        }
+        this.passportsByPassportId = passportData;
     }
 
     @Id
