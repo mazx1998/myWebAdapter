@@ -1,12 +1,9 @@
 package restapi;
 
-import database.entities.BirthPlacesEntity;
-import database.entities.PassportsEntity;
 import database.entities.RequestsEntity;
 import database.services.RequestService;
 import database.services.impl.RequestServiceImpl;
 import exceptions.NotAllFieldsAreFilledException;
-import org.json.JSONArray;
 import org.json.JSONObject;
 import restapi.authorization.Roles;
 import restapi.pojo.RequestFilterPojo;
@@ -19,8 +16,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.sql.Date;
-import java.sql.Timestamp;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -66,9 +61,7 @@ public class RestApi {
         }
 
         List<RequestPojo> requestsPojo = new LinkedList<>();
-        requestsEntities.forEach(requestsEntity -> {
-            requestsPojo.add(new RequestPojo(requestsEntity));
-        });
+        requestsEntities.forEach(requestsEntity -> requestsPojo.add(new RequestPojo(requestsEntity)));
 
         return Response.status(200).entity(requestsPojo).build();
     }
