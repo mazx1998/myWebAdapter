@@ -21,9 +21,15 @@ public class BirthPlacesPojo {
         id = birthPlacesEntity.getId();
         place_type = birthPlacesEntity.getPlaceType();
         settlement = birthPlacesEntity.getSettlement();
-        district = birthPlacesEntity.getDistrict();
-        region = birthPlacesEntity.getRegion();
-        country = birthPlacesEntity.getCountry();
+        if (birthPlacesEntity.getDistrict() != null)
+            district = birthPlacesEntity.getDistrict();
+        else district = null;
+        if (birthPlacesEntity.getRegion() != null)
+            region = birthPlacesEntity.getRegion();
+        else region = null;
+        if (birthPlacesEntity.getCountry() != null)
+            country = birthPlacesEntity.getCountry();
+        else country = null;
     }
 
     public int getId() {

@@ -21,7 +21,9 @@ public class PassportsPojo {
         series = passportsEntity.getSeries();
         number = passportsEntity.getNumber();
         issue_date = passportsEntity.getIssueDate().getTime();
-        issuer = passportsEntity.getIssuer();
+        if (passportsEntity.getIssuer() != null)
+            issuer = passportsEntity.getIssuer();
+        else issuer = null;
     }
 
     public int getId() {
