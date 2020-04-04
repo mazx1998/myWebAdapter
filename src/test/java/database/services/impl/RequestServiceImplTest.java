@@ -156,11 +156,8 @@ public class RequestServiceImplTest {
         Assert.assertTrue(actual);
     }
 
-    private String a;
-    private Integer b;
     @Test
     public void sandbox() {
 
-        System.out.println(b);
     }
 }
