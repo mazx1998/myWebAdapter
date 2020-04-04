@@ -32,8 +32,14 @@ public class RequestOutPojo {
         request_date = requestsEntity.getReqDate().getTime();
         response_date = requestsEntity.getRespDate().getTime();
         snils = requestsEntity.getSnils();
-        birth_places = new BirthPlacesPojo(requestsEntity.getBirthplacesByBirthPlaceId());
-        passport_data = new PassportsPojo(requestsEntity.getPassportsByPassportId());
+        if (requestsEntity.getBirthplacesByBirthPlaceId() != null)
+            birth_places = new BirthPlacesPojo(requestsEntity.getBirthplacesByBirthPlaceId());
+        else
+            birth_places = null;
+        if (requestsEntity.getPassportsByPassportId() != null)
+            passport_data = new PassportsPojo(requestsEntity.getPassportsByPassportId());
+        else
+            passport_data = null;
     }
 
     public int getId() {

@@ -51,7 +51,7 @@ public class RestApi {
         Consume json example:
         {
             "first_name": "Максим",
-            "last_name": null
+            "last_name": null,
             "patronymic": "Сергеевич",
             "page_number": 1,
             "page_size": 10
@@ -154,6 +154,8 @@ public class RestApi {
         try {
             RequestService requestService = new RequestServiceImpl();
             requestService.create(requestsEntity);
+
+            //TODO send request to SMEV
         } catch (Exception e) {
             e.printStackTrace();
             return Response.status(Response.Status.BAD_REQUEST).build();
@@ -163,6 +165,7 @@ public class RestApi {
     }
 
     /*
+    Consume json example:
     {
         "first_name": "Максим",
         "last_name": "Зеленский",
