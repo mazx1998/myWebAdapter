@@ -45,7 +45,7 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public List<UsersEntity> getAll(int pageNumber, int pageSize) {
-        return dao.findAll(pageNumber, pageSize);
+        return dao.findAllLimited(pageNumber, pageSize);
     }
 
     @Override

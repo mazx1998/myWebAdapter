@@ -19,9 +19,6 @@ public class RequestServiceImpl implements RequestService {
     private final String FAMILY_NAME_CLOSE_TAG = "</smev:FamilyName>";
     private final String FIRST_NAME_CLOSE_TAG = "</smev:FirstName>";
     private final String PATRONYMIC_CLOSE_TAG = "</smev:Patronymic>";
-    private final int DEFAULT_PAGE_NUMBER = 1;
-    private final int DEFAULT_PAGE_SIZE = 10;
-    private final int DEFAULT_MAX_PAGE_SIZE = 20;
     private final DataAccessObject<RequestsEntity> dao = new DataAccessObject<>(RequestsEntity.class);
 
     @Override
@@ -36,27 +33,26 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public List<RequestsEntity> getDataByFilter(RequestFilterPojo filter) {
-        Integer pageNumber;
-        Integer pageSize;
-        if (filter.getPage_number() == null) {
-            pageNumber = DEFAULT_PAGE_NUMBER;
+        Integer pageNumber = filter.getPage_number();
+        Integer pageSize = filter.getPage_size();
+
+        List<String> keyWords = getKeywords(filter);
+        if (keyWords.isEmpty()) {
+            if (pageNumber == null || pageSize == null) {
+                return dao.findAll();
+            } else {
+                return dao.findAllLimited(pageNumber, pageSize);
+            }
         } else {
-            pageNumber = filter.getPage_number();
-        }
-        if (filter.getPage_size() == null) {
-            pageSize = DEFAULT_PAGE_SIZE;
-        } else {
-            pageSize = filter.getPage_size();
-            if (pageSize > DEFAULT_MAX_PAGE_SIZE) {
-                pageSize = DEFAULT_MAX_PAGE_SIZE;
+            if (pageNumber == null || pageSize == null) {
+                return dao.findByFieldWithKeyWords(keyWords, "requestXml");
+            } else {
+                return dao.findByFieldWithKeyWordsLimited(keyWords, "requestXml", pageNumber, pageSize);
             }
         }
+    }
 
-        if (filter.getFamily_name() == null &&
-                filter.getFirst_name() == null && filter.getPatronymic() == null) {
-            return dao.findAll(pageNumber, pageSize);
-        }
-
+    private List<String> getKeywords(RequestFilterPojo filter) {
         List<String> keyWords = new ArrayList<>();
         if (filter.getFamily_name() != null) {
             keyWords.add(FAMILY_NAME_OPEN_TAG + filter.getFamily_name() + FAMILY_NAME_CLOSE_TAG);
@@ -67,13 +63,13 @@ public class RequestServiceImpl implements RequestService {
         if (filter.getPatronymic() != null) {
             keyWords.add(PATRONYMIC_OPEN_TAG + filter.getPatronymic() + PATRONYMIC_CLOSE_TAG);
         }
-        return dao.findInFieldWIthLike(keyWords, "requestXml", pageNumber, pageSize);
+        return keyWords;
     }
 
     @Override
     public Integer getRowsCountByFilter(RequestFilterPojo filter) {
-        List<RequestsEntity> result = getDataByFilter(filter);
-        return result != null ? result.size() : null;
+        List<RequestsEntity> data = getDataByFilter(filter);
+        return data.size();
     }
 
     @Override
@@ -83,7 +79,7 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public List<RequestsEntity> getAll(int pageNumber, int pageSize) {
-        return dao.findAll(pageNumber, pageSize);
+        return dao.findAllLimited(pageNumber, pageSize);
     }
 
     @Override

@@ -42,13 +42,8 @@ public class DataAccessObject<T extends MainEntity> {
         }
     }
 
-    public List<T> findInFieldWIthLike(List<String> keyWords, String field, int pageNumber, int pageSize) {
-        StringBuilder query = new StringBuilder("select e from ");
-        query.append(type.getSimpleName());
-        query.append(" e WHERE e.");
-        query.append(field).append(" LIKE '");
-        keyWords.forEach(tag -> query.append("%").append(tag));
-        query.append("%'");
+    public List<T> findByFieldWithKeyWordsLimited(List<String> keyWords, String field, int pageNumber, int pageSize) {
+        StringBuilder query = getQueryLike(keyWords, field);
 
         try {
             return HibernateSessionUtil
@@ -63,13 +58,49 @@ public class DataAccessObject<T extends MainEntity> {
         }
     }
 
-    public List<T> findAll(int pageNumber, int pageSize) {
+    public List<T> findByFieldWithKeyWords(List<String> keyWords, String field) {
+        StringBuilder query = getQueryLike(keyWords, field);
+
+        try {
+            return HibernateSessionUtil
+                    .getSession()
+                    .createQuery(query.toString(), type)
+                    .getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private StringBuilder getQueryLike(List<String> keyWords, String field) {
+        StringBuilder query = new StringBuilder("select e from ");
+        query.append(type.getSimpleName());
+        query.append(" e WHERE e.");
+        query.append(field).append(" LIKE '");
+        keyWords.forEach(tag -> query.append("%").append(tag));
+        query.append("%'");
+        return query;
+    }
+
+    public List<T> findAllLimited(int pageNumber, int pageSize) {
         try {
             return HibernateSessionUtil
                     .getSession()
                     .createQuery("from " + type.getSimpleName(), type)
                     .setFirstResult((pageNumber - 1) * pageSize)
                     .setMaxResults(pageSize)
+                    .getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public List<T> findAll() {
+        try {
+            return HibernateSessionUtil
+                    .getSession()
+                    .createQuery("from " + type.getSimpleName(), type)
                     .getResultList();
         } catch (Exception e) {
             e.printStackTrace();
