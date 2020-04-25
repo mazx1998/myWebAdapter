@@ -1,0 +1,24 @@
+
+.page-link {
+    color: #343a40;
+}
+
+.page-link:hover {
+    z-index: 2;
+    color: #343a40;
+    text-decoration: none;
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+}
+
+.page-item.active .page-link{
+    color: #fff;
+    background-color: #343a40;
+    border-color: #343a40;
+}
+
+.dropdown-item.active, .dropdown-item:active {
+    color: #fff;
+    text-decoration: none;
+    background-color: #343a40;
+}

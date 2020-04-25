@@ -4,8 +4,6 @@ import database.entities.RequestsEntity;
 import database.entities.UsersEntity;
 import database.services.RequestService;
 import database.services.UsersService;
-import database.services.impl.RequestServiceImpl;
-import database.services.impl.UsersServiceImpl;
 import exceptions.DataBaseException;
 import exceptions.NotAllFieldsAreFilledException;
 import restapi.pojo.RequestFilterPojo;
@@ -52,19 +50,20 @@ public class RestApi {
     @Path("/requests")
     @RolesAllowed({Roles.ADMIN, Roles.USER})
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    /*
-        Consume json example:
-        {
-            "first_name": "МАКСИМ",
-            "last_name": null,
-            "patronymic": "СЕРГЕЕВИЧ",
-            "page_number": 1,
-            "page_size": 10
-        }
-    */
-    public Response getRequestListWithFilter(RequestFilterPojo filter) {
+    public Response getRequestListWithFilter(@QueryParam("first_name") String firstName,
+                                             @QueryParam("family_name") String familyName,
+                                             @QueryParam("patronymic") String patronymic,
+                                             @QueryParam("page_number") Integer pageNumber,
+                                             @QueryParam("page_size") Integer pageSize) {
+        RequestFilterPojo filter = new RequestFilterPojo();
+        filter.setFirst_name(firstName);
+        filter.setFamily_name(familyName);
+        filter.setPatronymic(patronymic);
+        filter.setPage_number(pageNumber);
+        filter.setPage_size(pageSize);
+
         List<RequestsEntity> requestsEntities;
+
         requestsEntities = requestService.getDataByFilter(filter);
         if (requestsEntities == null) {
             return Response.status(Response.Status.BAD_REQUEST).build();
@@ -93,8 +92,18 @@ public class RestApi {
     @Path("/reqCount")
     @RolesAllowed({Roles.ADMIN, Roles.USER})
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response getRequestsCount(RequestFilterPojo filter) {
+    public Response getRequestsCount(@QueryParam("first_name") String firstName,
+                                     @QueryParam("family_name") String familyName,
+                                     @QueryParam("patronymic") String patronymic,
+                                     @QueryParam("page_number") Integer pageNumber,
+                                     @QueryParam("page_size") Integer pageSize) {
+        RequestFilterPojo filter = new RequestFilterPojo();
+        filter.setFirst_name(firstName);
+        filter.setFamily_name(familyName);
+        filter.setPatronymic(patronymic);
+        filter.setPage_number(pageNumber);
+        filter.setPage_size(pageSize);
+
         Integer rowsCount = requestService.getRowsCountByFilter(filter);
         if (rowsCount == null) {
             return Response.status(Response.Status.BAD_REQUEST).build();
