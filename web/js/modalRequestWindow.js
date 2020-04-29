@@ -1,79 +1,3 @@
-/*class RequestModalWindowValidator {
-    modal = $("#requestModal");
-    secondColumn = $("#secondColumn");
-    firstColumnHeader = $("#firstColumnHeader");
-    // Can be hidden
-    patronymicDiv = $("#patronymicDiv");
-    passportDiv = $("#passportDiv");
-    birthPlaceDiv = $("#birthPlaceDiv");
-    // Start fields
-    firstNameField = $('#reqFirstName');
-    familyNameField = $('#reqFamilyName');
-    patronymicCheckField = $("#patronymicCheck");
-    patronymicField = $("#reqPatronymic");
-    birthDateField = $('#reqBirthDate');
-    genderCB = $('#reqGender');
-    requestTypeCB = $('#reqType');
-    startRequiredFields = [this.firstNameField, this.familyNameField,
-        this.birthDateField, this.genderCB, this.requestTypeCB ];
-    // Passport fields
-    seriesField = $('#reqSeries');
-    numberField = $('#reqNumber');
-    issueDateField = $('#reqIssueDate');
-    issuerField = $('#reqIssuer');
-    passportRequiredFields = [this.seriesField, this.numberField , this.issueDateField, this.issuerField];
-    // Birth place fields
-    placeTypeCB = $('#reqPlaceType');
-    settlementField = $('#reqSettlement');
-    districtField = $('#reqDistrict');
-    regionField = $('#reqRegion');
-    countryField = $('#reqCountry');
-    birthPlaceRequiredFields = [this.placeTypeCB, this.settlementField];
-
-    constructor() {
-        // Hide unused elements
-        this.secondColumn.hide();
-        this.firstColumnHeader.hide();
-        // Hide blocks that must be hidden
-        this.patronymicDiv.hide();
-        this.passportDiv.hide();
-        this.birthPlaceDiv.hide();
-        // Add 'is-invalid' class on visible fields
-        this.addInvalidToAll(this.startRequiredFields);
-        // Clear all input values
-        this.clearInputValues();
-    }
-
-    setDefaultProperties() {
-        this.removeInvalidFromAll(this.startRequiredFields);
-        this.removeInvalidFromAll(this.passportRequiredFields);
-        this.removeInvalidFromAll(this.birthPlaceRequiredFields);
-        this.clearInputValues();
-        this.patronymicCheckField.prop("checked", false);
-        this.patronymicField.removeClass('is-valid');
-        this.patronymicField.removeClass('is-invalid');
-    }
-
-    addInvalidToAll($fieldsId) {
-        $.each($fieldsId, function() {
-            this.addClass('is-invalid');
-        });
-    }
-
-    removeInvalidFromAll($fieldsId){
-        $.each($fieldsId, function() {
-            this.removeClass('is-invalid');
-            this.removeClass('is-valid');
-        });
-    }
-
-    clearInputValues(){
-        this.modal.find ('input, textarea, select').each(function() {
-            $(this).val('');
-        });
-    }
-}*/
-
 function makeValid($field){
     $field.removeClass('is-invalid').addClass('is-valid');
 }
@@ -105,23 +29,24 @@ function clearInputValues($modal){
 
 $(document).ready(function(){
 
-    let defaultInputsId = [$('#reqFirstName'), $('#reqFamilyName'), $('#reqBirthDate'), $('#reqGender'), $('#reqType')];
-    let passportDataId = [$('#reqSeries'), $('#reqNumber'), $('#reqIssueDate'), $('#reqIssuer')];
-    let birthPlaceDataId = [$('#reqPlaceType'), $('#reqSettlement')];
+    const defaultInputsId = [$('#reqFirstName'), $('#reqFamilyName'), $('#reqBirthDate'), $('#reqGender'), $('#reqType')];
+    const passportDataId = [$('#reqSeries'), $('#reqNumber'), $('#reqIssueDate'), $('#reqIssuer')];
+    const birthPlaceDataId = [$('#reqPlaceType'), $('#reqSettlement')];
 
-    let requestTypeField = $("#reqType");
-    let modalReqForm = $("#requestModal");
-    let patronymicCheckField = $("#patronymicCheck");
-    let openCreateRequestModal = $("#openCreateRequestModal");
+    const requestTypeField = $("#reqType");
+    const modalReqForm = $("#requestModal");
+    const patronymicCheckField = $("#patronymicCheck");
+    const openCreateRequestModal = $("#openCreateRequestModal");
 
     openCreateRequestModal.on('click', function () {
-        let secondColumn = $("#secondColumn");
-        let firstColumnHeader = $("#firstColumnHeader");
-        let patronymicDiv = $("#patronymicDiv");
-        let patronymicField = $("#reqPatronymic");
+        const secondColumn = $("#secondColumn");
+        const firstColumn = $("#firstColumn");
+        const firstColumnHeader = $("#firstColumnHeader");
+        const patronymicDiv = $("#patronymicDiv");
+        const patronymicField = $("#reqPatronymic");
 
-        let passportDiv = $("#passportDiv");
-        let birthPlaceDiv = $("#birthPlaceDiv");
+        const passportDiv = $("#passportDiv");
+        const birthPlaceDiv = $("#birthPlaceDiv");
 
         // Set parameters
         secondColumn.hide();
@@ -149,67 +74,53 @@ $(document).ready(function(){
 
             // Remove all event handlers
             modalReqForm.off();
-            requestTypeField.off();
-            $.each(inputModalFields, function () {
-                this.off();
+            modalReqForm.find ('input, textarea, select').each(function() {
+                $(this).off();
             });
-            $.each(datesInputModalFields, function () {
-                this.off();
-            });
-            $.each(selectInputModalFields, function () {
-                this.off();
-            });
-            patronymicCheckField.off();
-            requestTypeField.off();
-            series.off();
-            number.off();
-            modalReqForm.off();
         });
 
         // Empty space validation
-        let inputModalFields = [ $("#reqFirstName"), $("#reqFamilyName"), $("#reqPatronymic"),
-            $("#reqIssuer"), $("#reqSettlement") ];
-        for (let i = 0; i < inputModalFields.length; i++) {
-            inputModalFields[i].on('keyup', function () {
-                let field = $(this).val();
-                if (field.trim()) {
-                    // is not empty or whitespace
-                    makeValid($(this));
-                } else {
-                    makeInvalid($(this));
-                }
-            });
-        }
+        firstColumn.find('input[type="text"], textarea').each(function() {
+            const optionalFields = ['reqDistrict', 'reqRegion',
+                'reqCountry', 'reqSeries', 'reqNumber'];
+            // If not optional field
+            if ($.inArray($(this).attr('id'), optionalFields) === -1) {
+                $(this).on('keyup', function () {
+                    let field = $(this).val();
+                    if (field.trim()) {
+                        // is not empty or whitespace
+                        makeValid($(this));
+                    } else {
+                        makeInvalid($(this));
+                    }
+                });
+            }
+        });
 
         // Dates validator
-        let datesInputModalFields = [$("#reqBirthDate"), $("#reqIssueDate")];
-        for (let i = 0; i < datesInputModalFields.length; i++) {
-            datesInputModalFields[i].change(function () {
-                let minDate = new Date(1900, 1, 1);
-                let maxDate = new Date(); // Current
-                let date = new Date($(this).val());
+        firstColumn.find('input[type="date"]').change(function() {
+            let minDate = new Date(1900, 1, 1);
+            let maxDate = new Date(); // Current
 
-                if (date.getTime() <= maxDate.getTime() && date.getTime() >= minDate.getTime()) {
-                    makeValid($(this));
-                } else {
-                    makeInvalid($(this));
-                }
-            });
-        }
+            let date = new Date($(this).val());
+
+            if (date.getTime() <= maxDate.getTime() && date.getTime() >= minDate.getTime()) {
+                makeValid($(this));
+            } else {
+                makeInvalid($(this));
+            }
+        });
 
         // Selects validator
-        let selectInputModalFields = [$("#reqGender"), $("#reqPlaceType"), requestTypeField];
-        for (let i = 0; i < selectInputModalFields.length; i++) {
-            selectInputModalFields[i].change(function () {
-                let selectedItemValue = $(this).children("option:selected").val();
-                let itemsCount = $(this).children("option").length;
-                if (selectedItemValue > 0 && selectedItemValue <= itemsCount) {
-                    makeValid($(this));
-                } else {
-                    makeInvalid($(this));
-                }
-            });
-        }
+        firstColumn.find('select').change(function() {
+            let selectedItemValue = $(this).children("option:selected").val();
+            let itemsCount = $(this).children("option").length;
+            if (selectedItemValue > 0 && selectedItemValue <= itemsCount) {
+                makeValid($(this));
+            } else {
+                makeInvalid($(this));
+            }
+        });
 
         // Check patronymic controller
         patronymicCheckField.change(function() {
@@ -259,8 +170,7 @@ $(document).ready(function(){
         });
 
         // Passport data validations
-        let series = $("#reqSeries");
-        let number = $("#reqNumber");
+        const series = $("#reqSeries");
         // Series
         series.mask('0000', {placeholder: "____"});
         series.on('keyup', function () {
@@ -271,6 +181,7 @@ $(document).ready(function(){
             }
         });
         //  Number
+        const number = $("#reqNumber");
         number.mask('000009', {placeholder: "______"});
         number.on('keyup', function () {
             if ($(this).val().length === 6) {
@@ -351,9 +262,9 @@ $(document).ready(function(){
             if ($(this).hasClass('is-invalid')) {
                 alert("Не все поля заполнены");
                 allFieldsIsValid = false;
-                return false;
             }
         });
+
         if (allFieldsIsValid) {
             let requestType = requestTypeField.children("option:selected").val();
 
