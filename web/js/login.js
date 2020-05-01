@@ -10,7 +10,7 @@ $(document).ready(function(){
     const $logoutButton = $("#logoutButton");
     $lbSpinner.hide();
 
-    // If page opened first time
+
     if (sessionStorage[IS_AUTHORIZED_KEY] != null) {
         const isAuthorized = sessionStorage[IS_AUTHORIZED_KEY];
         if (isAuthorized === "false") {
@@ -20,8 +20,10 @@ $(document).ready(function(){
         } else {
             $mainContent.show();
             $loginForm.hide();
+            requestsTableInit();
         }
-    } else {
+    } // If page opened first time
+    else {
         $mainContent.hide();
         sessionStorage[IS_AUTHORIZED_KEY] = false;
     }

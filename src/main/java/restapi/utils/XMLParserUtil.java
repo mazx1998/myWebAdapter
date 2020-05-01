@@ -187,12 +187,13 @@ public class XMLParserUtil {
                             break;
                         case GENDER_TAG:
                             event = eventReader.nextEvent();
-                            String gender = event.asCharacters().getData().equals("Male") ? "MУЖСКОЙ" : "ЖЕНСКИЙ";
+                            String gender = event.asCharacters().getData().equals("Male") ? "MALE" : "FEMALE";
                             obj.setGender(gender);
                             break;
                         case PLACE_TYPE_TAG:
                             event = eventReader.nextEvent();
-                            obj.setPlace_type(event.asCharacters().getData());
+                            String placeType = event.asCharacters().getData().equals("ОСОБОЕ") ? "SPECIAL" : "STANDART";
+                            obj.setPlace_type(placeType);
                             break;
                         case SETTLEMENT_TAG:
                             event = eventReader.nextEvent();

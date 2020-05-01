@@ -8,7 +8,6 @@ import restapi.pojo.RequestFilterPojo;
 import javax.enterprise.context.ApplicationScoped;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @author Максим Зеленский

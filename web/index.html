@@ -22,12 +22,12 @@
     <script src="js/bootstrap-table-ru-RU.js"></script>
     <!--JQuery-Mask-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+    <!--Modal request script-->
+    <script src="js/modalRequestWindow.js"></script>
     <!--Main content behavior-->
     <script src="js/mainContentBehavior.js"></script>
     <!--Login script-->
     <script src="js/login.js"></script>
-    <!--Modal request script-->
-    <script src="js/modalRequestWindow.js"></script>
 
     <link rel="stylesheet" href="css/custom.css">
     <title>Адаптер СМЭВ</title>
@@ -126,7 +126,7 @@
                 <th data-field="author">Автор</th>
                 <th data-field="request_date">Дата запроса</th>
                 <th data-field="response_date">дата ответа</th>
-                <th data-field="snils">Статус</th>
+                <th data-field="status" data-cell-style="cellStyle">Статус</th>
               </tr>
               </thead>
               <!--<tbody>
@@ -170,7 +170,7 @@
                   <input type="text" class="form-control " id="reqFamilyName" required>
                 </div>
                 <!--Check Patronymic-->
-                <div class="form-group form-check">
+                <div class="form-group form-check" id="patronymicCheckBlock">
                   <input type="checkbox" class="form-check-input" id="patronymicCheck">
                   <label class="form-check-label" for="patronymicCheck">У застрахованного лица есть отчество</label>
                 </div>
@@ -193,7 +193,7 @@
                   </select>
                 </div>
                 <!--Request type-->
-                <div class="form-group">
+                <div class="form-group" id="requestType">
                   <label for="reqType">Указать</label>
                   <select class="custom-select" id="reqType" required>
                     <option value="1">Паспорт РФ</option>
@@ -240,17 +240,17 @@
                     <input type="text" class="form-control" id="reqSettlement" required>
                   </div>
                   <!--District-->
-                  <div class="form-group">
+                  <div class="form-group" id="reqDistrictDiv">
                     <label for="reqDistrict">Район</label>
                     <input type="text" class="form-control" id="reqDistrict">
                   </div>
                   <!--Region-->
-                  <div class="form-group">
+                  <div class="form-group" id="reqRegionDiv">
                     <label for="reqRegion">Регион</label>
                     <input type="text" class="form-control" id="reqRegion">
                   </div>
                   <!--Country-->
-                  <div class="form-group">
+                  <div class="form-group" id="reqCountryDiv">
                     <label for="reqCountry">Страна</label>
                     <input type="text" class="form-control" id="reqCountry">
                   </div>
@@ -331,17 +331,17 @@
                     <input type="text" class="form-control" id="resSettlement" >
                   </div>
                   <!--District-->
-                  <div class="form-group">
+                  <div class="form-group" id="resDistrictDiv">
                     <label for="resDistrict">Район</label>
                     <input type="text" class="form-control" id="resDistrict">
                   </div>
                   <!--Region-->
-                  <div class="form-group">
+                  <div class="form-group" id="resRegionDiv">
                     <label for="resRegion">Регион</label>
                     <input type="text" class="form-control" id="resRegion">
                   </div>
                   <!--Country-->
-                  <div class="form-group">
+                  <div class="form-group" id="resCountryDiv">
                     <label for="resCountry">Страна</label>
                     <input type="text" class="form-control" id="resCountry">
                   </div>

@@ -245,6 +245,8 @@ $(document).ready(function(){
                 alert("Запрос отправлен");
                 createRequestSpinner.hide();
                 openCreateRequestModal.prop('disabled', false);
+                // Refresh table
+                $("#refreshButton").trigger('click');
             },
             error: function () {
                 alert("Ошибка при отправке запроса");
@@ -262,6 +264,7 @@ $(document).ready(function(){
             if ($(this).hasClass('is-invalid')) {
                 alert("Не все поля заполнены");
                 allFieldsIsValid = false;
+                return false;
             }
         });
 

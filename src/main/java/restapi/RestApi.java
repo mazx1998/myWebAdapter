@@ -21,6 +21,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.sql.Timestamp;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -71,14 +72,10 @@ public class RestApi {
 
         List<RequestResponsePojo> requestsPojo = new LinkedList<>();
         requestsEntities.forEach(requestsEntity -> {
-            RequestResponsePojo pojo;
-            pojo = XMLParserUtil.getPojoFromRequestXML(requestsEntity.getRequestXml());
+            RequestResponsePojo pojo = new RequestResponsePojo();
             pojo.setRequest_date(requestsEntity.getRequestDate().getTime());
             pojo.setId(requestsEntity.getId());
             pojo.setAuthor(requestsEntity.getUserId().getLogin());
-            if (requestsEntity.getResponseXml() != null) {
-                pojo.setSnils(XMLParserUtil.getSnilsFromResponseXML(requestsEntity.getResponseXml()));
-            }
             if (requestsEntity.getResponseDate() != null) {
                 pojo.setResponse_date(requestsEntity.getResponseDate().getTime());
             }
@@ -86,6 +83,28 @@ public class RestApi {
         });
 
         return Response.status(200).entity(requestsPojo).build();
+    }
+
+    @GET
+    @Path("/request")
+    @RolesAllowed({Roles.ADMIN, Roles.USER})
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getRequestById(@QueryParam("id") Integer id) {
+        RequestsEntity requestsEntity = requestService.getById(id);
+
+        RequestResponsePojo pojo;
+        pojo = XMLParserUtil.getPojoFromRequestXML(requestsEntity.getRequestXml());
+        pojo.setRequest_date(requestsEntity.getRequestDate().getTime());
+        pojo.setId(requestsEntity.getId());
+        pojo.setAuthor(requestsEntity.getUserId().getLogin());
+        if (requestsEntity.getResponseXml() != null) {
+            pojo.setSnils(XMLParserUtil.getSnilsFromResponseXML(requestsEntity.getResponseXml()));
+        }
+        if (requestsEntity.getResponseDate() != null) {
+            pojo.setResponse_date(requestsEntity.getResponseDate().getTime());
+        }
+
+        return Response.status(200).entity(pojo).build();
     }
 
     @GET
