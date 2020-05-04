@@ -1,19 +1,3 @@
-function sendGetReqCount(){
-    const GET_REQ_COUNT_URL = 'http://localhost:8080/myWebAdapter_war_exploded/app/rest/reqCount';
-    return $.ajax ({
-        type: "GET",
-        url: GET_REQ_COUNT_URL,
-        contentType: 'application/json',
-        data: $.param({}),
-        beforeSend: function (xhr){
-            xhr.setRequestHeader('Authorization', sessionStorage[BTOA_KEY]);
-        },
-        error: function (er) {
-            console.log(er)
-        }
-    });
-}
-
 function convertDataForTable(sourceData) {
     let changedData = [];
     sourceData.forEach(function (object) {
@@ -46,45 +30,18 @@ function cellStyle(value, row, index) {
     };
 }
 
-function ajaxRequest(params) {
-    sendGetReqCount().then(function (reqCount) {
-        const GET_REQUESTS_URL = 'http://localhost:8080/myWebAdapter_war_exploded/app/rest/requests';
-        return $.ajax({
-            type: "GET",
-            url: GET_REQUESTS_URL,
-            data: $.param({page_number: (params.data.offset / params.data.limit + 1), page_size: params.data.limit}),
-            contentType: 'application/json',
-            beforeSend: function (xhr){
-                xhr.setRequestHeader('Authorization', sessionStorage[BTOA_KEY]);
-            },
-            success: function (data) {
-                params.success({
-                    "rows": convertDataForTable(data),
-                    "total": reqCount["rows_count"]
-                })
-            },
-            error: function (er) {
-                console.log(er)
-            }
-        });
-    });
-}
-
 function fillModalForm(data) {
     let withPatronymic;
     // If patronymic is exists
     withPatronymic = "patronymic" in data;
-    console.log("With patronymic: " + withPatronymic);
 
     let withPassportData;
     // If passport data is exists
     withPassportData = "passport_number" in data;
-    console.log("With passport data: " + withPassportData);
 
     let withBirthPlaceData;
     // If birth place data is exists
     withBirthPlaceData = "place_type" in data;
-    console.log("With birth place data: " + withBirthPlaceData);
 
     // If response is exists
     if ("snils" in data) {
@@ -256,8 +213,61 @@ function showRequestData(requestId) {
             console.log(er)
         }
     });
+}
 
+var searchData = {};
 
+function createSearchParamObj(searchParams) {
+    let paramObj = {};
+    if ("author" in searchParams) {
+        paramObj.author = searchParams.author
+    }
+    return paramObj;
+}
+
+function sendGetReqCount(params){
+    const GET_REQ_COUNT_URL = 'http://localhost:8080/myWebAdapter_war_exploded/app/rest/reqCount';
+    let paramObj = createSearchParamObj(searchData);
+    return $.ajax ({
+        type: "GET",
+        url: GET_REQ_COUNT_URL,
+        contentType: 'application/json',
+        data: $.param(paramObj),
+        beforeSend: function (xhr){
+            xhr.setRequestHeader('Authorization', sessionStorage[BTOA_KEY]);
+        },
+        error: function (er) {
+            console.log(er)
+        }
+    });
+}
+
+function ajaxRequest(params) {
+    sendGetReqCount(params).then(function (reqCount) {
+        const GET_REQUESTS_URL = 'http://localhost:8080/myWebAdapter_war_exploded/app/rest/requests';
+        let paramObj = createSearchParamObj(searchData);
+        paramObj.page_number = (params.data.offset / params.data.limit + 1);
+        paramObj.page_size = params.data.limit;
+        console.log(params);
+        return $.ajax({
+            type: "GET",
+            url: GET_REQUESTS_URL,
+            data: $.param(paramObj),
+            contentType: 'application/json',
+            beforeSend: function (xhr){
+                xhr.setRequestHeader('Authorization', sessionStorage[BTOA_KEY]);
+            },
+            success: function (data) {
+                params.success({
+                    "rows": convertDataForTable(data),
+                    "total": reqCount["rows_count"]
+                })
+            },
+            error: function (er) {
+                console.log(er)
+            }
+        });
+    });
 }
 
 function requestsTableInit() {
@@ -276,7 +286,7 @@ function requestsTableInit() {
 
 $(document).ready(function () {
     // expand search button
-    const $expandableSearchFields = [$("#firstNameSearchField"),
+    /*const $expandableSearchFields = [$("#firstNameSearchField"),
         $("#familyNameSearchField"), $("#patronymicSearchField")];
     $.each($expandableSearchFields, function () {
         this.hide();
@@ -304,12 +314,24 @@ $(document).ready(function () {
             });
             $expandButton.attr('title', 'Расширить поиск');
         }
-    });
+    });*/
 
     // Refresh table button
     var refreshButton = $("#refreshButton");
     refreshButton.on('click', function () {
         $('#requestsTable').bootstrapTable('refresh');
     });
+
+    const authorSearchField = $("#authorSearchField");
+
+    const searchButton = $("#searchButton");
+    searchButton.on('click', function (e) {
+        e.preventDefault();
+        searchData.author = authorSearchField.val().trim();
+        if (searchData.author.length === 0) {
+            delete searchData.author;
+        }
+        refreshButton.trigger('click');
+    })
 
 });
