@@ -1,21 +1,21 @@
 package database.services.impl;
 
-import database.DataAccessObject;
+import database.dao.RequestDataAccess;
 import database.entities.RequestsEntity;
+import database.entities.UsersEntity;
 import database.services.RequestService;
+import exceptions.DataBaseException;
 import restapi.pojo.RequestFilterPojo;
 
 import javax.enterprise.context.ApplicationScoped;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author Максим Зеленский
- * @since 06.03.2020
  */
 @ApplicationScoped
 public class RequestServiceImpl implements RequestService {
-    private final DataAccessObject<RequestsEntity> dao = new DataAccessObject<>(RequestsEntity.class);
+    private final RequestDataAccess dao = new RequestDataAccess(RequestsEntity.class);
 
     @Override
     public void create(RequestsEntity obj) {
@@ -29,61 +29,39 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public List<RequestsEntity> getDataByFilter(RequestFilterPojo filter) {
-        final String REQUEST_XML_FIELD = "requestXml";
-        Integer pageNumber = filter.getPage_number();
-        Integer pageSize = filter.getPage_size();
+        Integer offset = filter.getOffset();
+        Integer limit = filter.getLimit();
+        String author = filter.getAuthor();
 
-        List<String> keyWords = getKeywords(filter);
-        if (keyWords.isEmpty()) {
-            if (pageNumber == null || pageSize == null) {
-                return dao.findAll();
+        if (author == null) {
+            if (offset == null || limit == null) {
+                return dao.findAll("requestDate", true);
             } else {
-                return dao.findAllLimited(pageNumber, pageSize);
+                return dao.findAll(offset, limit, "requestDate", true);
             }
         } else {
-            if (pageNumber == null || pageSize == null) {
-                return dao.findByFieldWithKeyWords(keyWords, REQUEST_XML_FIELD);
+            UsersServiceImpl usersService = new UsersServiceImpl();
+            UsersEntity user = null;
+            try {
+                user = usersService.findByLogin(author);
+            } catch (DataBaseException e) {
+                e.printStackTrace();
+            }
+            if (offset == null || limit == null) {
+                return user != null ?
+                        dao.getByAuthorName(user.getLogin(), "requestDate", true) : null;
             } else {
-                return dao.findByFieldWithKeyWordsLimited(keyWords, REQUEST_XML_FIELD, pageNumber, pageSize);
+                return user != null ?
+                        dao.getByAuthorName(offset, limit, user.getLogin(),
+                                "requestDate", true): null;
             }
         }
-    }
-
-    private List<String> getKeywords(RequestFilterPojo filter) {
-        final String FAMILY_NAME_OPEN_TAG = "<smev:FamilyName>";
-        final String FIRST_NAME_OPEN_TAG = "<smev:FirstName>";
-        final String PATRONYMIC_OPEN_TAG = "<smev:Patronymic>";
-        final String FAMILY_NAME_CLOSE_TAG = "</smev:FamilyName>";
-        final String FIRST_NAME_CLOSE_TAG = "</smev:FirstName>";
-        final String PATRONYMIC_CLOSE_TAG = "</smev:Patronymic>";
-
-        List<String> keyWords = new ArrayList<>();
-        if (filter.getFamily_name() != null) {
-            keyWords.add(FAMILY_NAME_OPEN_TAG + filter.getFamily_name() + FAMILY_NAME_CLOSE_TAG);
-        }
-        if (filter.getFirst_name() != null) {
-            keyWords.add(FIRST_NAME_OPEN_TAG + filter.getFirst_name() + FIRST_NAME_CLOSE_TAG);
-        }
-        if (filter.getPatronymic() != null) {
-            keyWords.add(PATRONYMIC_OPEN_TAG + filter.getPatronymic() + PATRONYMIC_CLOSE_TAG);
-        }
-        return keyWords;
     }
 
     @Override
     public Integer getRowsCountByFilter(RequestFilterPojo filter) {
         List<RequestsEntity> data = getDataByFilter(filter);
-        return data.size();
-    }
-
-    @Override
-    public Long getRowsCount() {
-        return dao.getRowsCount();
-    }
-
-    @Override
-    public List<RequestsEntity> getAll(int pageNumber, int pageSize) {
-        return dao.findAllLimited(pageNumber, pageSize);
+        return data != null ? data.size() : 0;
     }
 
     @Override

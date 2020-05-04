@@ -76,25 +76,6 @@ public class RequestServiceImplTest {
     }
 
     @Test
-    public void getAll() {
-        int pageNumber = 1;
-        int pageSize = 20;
-        // Get all requests entities using Hibernate session factory
-        List<RequestsEntity> testList =
-                HibernateSessionUtil.getSession()
-                .createQuery("from RequestsEntity", RequestsEntity.class)
-                .setFirstResult((pageNumber - 1) * pageSize)
-                .setMaxResults(pageSize)
-                .getResultList();
-        // Get all requests entities using method 'getAll'
-        List<RequestsEntity> testList2 = requestServiceTest.getAll(pageNumber, pageSize);
-        // Compare lists
-        boolean actual = testList.equals(testList2);
-
-        Assert.assertTrue(actual);
-    }
-
-    @Test
     public void update() {
         //Add record that we will change
         RequestsEntity testRequestEntity1 = new RequestsEntity(

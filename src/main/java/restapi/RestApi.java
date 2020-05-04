@@ -21,13 +21,11 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.sql.Timestamp;
-import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
 /**
  * @author Максим Зеленский
- * @since 07.03.2020
  */
 @Path("rest")
 public class RestApi {
@@ -51,23 +49,19 @@ public class RestApi {
     @Path("/requests")
     @RolesAllowed({Roles.ADMIN, Roles.USER})
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getRequestListWithFilter(@QueryParam("first_name") String firstName,
-                                             @QueryParam("family_name") String familyName,
-                                             @QueryParam("patronymic") String patronymic,
-                                             @QueryParam("page_number") Integer pageNumber,
-                                             @QueryParam("page_size") Integer pageSize) {
+    public Response getRequestListWithFilter(@QueryParam("author") String author,
+                                             @QueryParam("offset") Integer offset,
+                                             @QueryParam("limit") Integer limit) {
         RequestFilterPojo filter = new RequestFilterPojo();
-        filter.setFirst_name(firstName);
-        filter.setFamily_name(familyName);
-        filter.setPatronymic(patronymic);
-        filter.setPage_number(pageNumber);
-        filter.setPage_size(pageSize);
+        filter.setAuthor(author);
+        filter.setOffset(offset);
+        filter.setLimit(limit);
 
         List<RequestsEntity> requestsEntities;
 
         requestsEntities = requestService.getDataByFilter(filter);
         if (requestsEntities == null) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            return Response.status(Response.Status.OK).entity(new JSONObject().toString()).build();
         }
 
         List<RequestResponsePojo> requestsPojo = new LinkedList<>();
@@ -111,21 +105,17 @@ public class RestApi {
     @Path("/reqCount")
     @RolesAllowed({Roles.ADMIN, Roles.USER})
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getRequestsCount(@QueryParam("first_name") String firstName,
-                                     @QueryParam("family_name") String familyName,
-                                     @QueryParam("patronymic") String patronymic,
-                                     @QueryParam("page_number") Integer pageNumber,
-                                     @QueryParam("page_size") Integer pageSize) {
+    public Response getRequestsCount(@QueryParam("author") String author,
+                                     @QueryParam("offset") Integer offset,
+                                     @QueryParam("limit") Integer limit) {
         RequestFilterPojo filter = new RequestFilterPojo();
-        filter.setFirst_name(firstName);
-        filter.setFamily_name(familyName);
-        filter.setPatronymic(patronymic);
-        filter.setPage_number(pageNumber);
-        filter.setPage_size(pageSize);
+        filter.setAuthor(author);
+        filter.setOffset(offset);
+        filter.setLimit(limit);
 
         Integer rowsCount = requestService.getRowsCountByFilter(filter);
         if (rowsCount == null) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            return Response.status(Response.Status.OK).entity(new JSONObject().toString()).build();
         }
 
         JSONObject jsonObject = new JSONObject();
@@ -186,25 +176,25 @@ public class RestApi {
     {
         "author": "user",
 
-        "first_name": "МАКСИМ",
-        "family_name": "ЗЕЛЕНСКИЙ",
-        "patronymic": "СЕРГЕЕВИЧ",          // can be removed
-        "gender": "МУЖСКОЙ",
+        "first_name": "РњРђРљРЎРРњ",
+        "family_name": "Р—Р•Р›Р•РќРЎРљРР™",
+        "patronymic": "РЎР•Р Р“Р•Р•Р’РР§",          // can be removed
+        "gender": "РњРЈР–РЎРљРћР™",
         "birth_date": 886269600000,
         "request_date": 1585573975000,
         "response_date": 1585649577000,    // can be removed
         "snils": "1234567",                // can be removed
 
-    	"place_type": "ОСОБОЕ",
-    	"settlement": "МИРНЫЙ",
-    	"district": "РАЙОН",               // can be removed
-    	"region": "РЕГИОН",                // can be removed
-        "country": "РФ",                   // can be removed
+    	"place_type": "РћРЎРћР‘РћР•",
+    	"settlement": "РњРР РќР«Р™",
+    	"district": "Р РђР™РћРќ",               // can be removed
+    	"region": "Р Р•Р“РРћРќ",                // can be removed
+        "country": "Р Р¤",                   // can be removed
 
         "passport_series": "0005",
         "passport_number": "777777",
         "passport_issue_date": 1490806800000,
-        "passport_issuer": "ОВД"
+        "passport_issuer": "РћР’Р”"
     }
     * You can use birth place data or passport data or both
     */

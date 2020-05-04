@@ -246,8 +246,8 @@ function ajaxRequest(params) {
     sendGetReqCount(params).then(function (reqCount) {
         const GET_REQUESTS_URL = 'http://localhost:8080/myWebAdapter_war_exploded/app/rest/requests';
         let paramObj = createSearchParamObj(searchData);
-        paramObj.page_number = (params.data.offset / params.data.limit + 1);
-        paramObj.page_size = params.data.limit;
+        paramObj.offset = params.data.offset;
+        paramObj.limit = params.data.limit;
         console.log(params);
         return $.ajax({
             type: "GET",
@@ -258,8 +258,13 @@ function ajaxRequest(params) {
                 xhr.setRequestHeader('Authorization', sessionStorage[BTOA_KEY]);
             },
             success: function (data) {
+                let rows;
+                if (jQuery.isEmptyObject(data))
+                    rows = [];
+                else
+                    rows = convertDataForTable(data)
                 params.success({
-                    "rows": convertDataForTable(data),
+                    "rows": rows,
                     "total": reqCount["rows_count"]
                 })
             },
