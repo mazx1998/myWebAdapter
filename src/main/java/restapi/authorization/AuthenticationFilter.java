@@ -105,6 +105,8 @@ public class AuthenticationFilter implements javax.ws.rs.container.ContainerRequ
         }
 
         String md5Hex = DigestUtils.md5Hex(password);
+
+        //md5 for password 'password' : 5f4dcc3b5aa765d61d8327deb882cf99
         if (md5Hex.equals(foundUser.getPassword())) {
             // Verify user role
             if (rolesSet.contains(foundUser.getRole())) {

@@ -90,6 +90,23 @@
             <version>1.14</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/javax/javaee-api -->
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <version>8.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/javax/javaee-web-api -->
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-web-api</artifactId>
+            <version>8.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+
+
         <!-- https://mvnrepository.com/artifact/org.glassfish.jersey.inject/jersey-hk2 -->
        <!-- <dependency>
             <groupId>org.glassfish.jersey.inject</groupId>
@@ -113,7 +130,7 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.2.1</version>
                 <configuration>
-                    <warSourceDirectory>webapp</warSourceDirectory>
+                    <warSourceDirectory>src/web</warSourceDirectory>
                     <attachClasses>true</attachClasses>
                 </configuration>
                 <executions>
