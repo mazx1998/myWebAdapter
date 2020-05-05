@@ -221,7 +221,7 @@ $(document).ready(function(){
         }
     };
 
-    let CREATE_REQUEST_URL = "http://localhost:8080/myWebAdapter_war_exploded/app/rest/createRequest";
+    let CREATE_REQUEST_URL = "http://localhost:8080/myWebAdapter-1.0/app/rest/createRequest";
     let BTOA_KEY = 'btoa';
 
     let sendReqButton = $("button#sendReqButton");
