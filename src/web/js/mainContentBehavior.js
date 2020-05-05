@@ -154,7 +154,7 @@ function fillModalForm(data) {
 }
 
 function showRequestData(requestId) {
-    const GET_REQUEST_URL = 'http://localhost:8080/myWebAdapter_war_exploded/app/rest/request';
+    const GET_REQUEST_URL = 'http://localhost:8080/myWebAdapter-1.0/app/rest/request';
     const modalForm = $("#requestModal");
     $("#sendReqButton").hide();
     $("#patronymicCheckBlock").hide();
@@ -226,7 +226,7 @@ function createSearchParamObj(searchParams) {
 }
 
 function sendGetReqCount(params){
-    const GET_REQ_COUNT_URL = 'http://localhost:8080/myWebAdapter_war_exploded/app/rest/reqCount';
+    const GET_REQ_COUNT_URL = 'http://localhost:8080/myWebAdapter-1.0/app/rest/reqCount';
     let paramObj = createSearchParamObj(searchData);
     return $.ajax ({
         type: "GET",
@@ -244,7 +244,7 @@ function sendGetReqCount(params){
 
 function ajaxRequest(params) {
     sendGetReqCount(params).then(function (reqCount) {
-        const GET_REQUESTS_URL = 'http://localhost:8080/myWebAdapter_war_exploded/app/rest/requests';
+        const GET_REQUESTS_URL = 'http://localhost:8080/myWebAdapter-1.0/app/rest/requests';
         let paramObj = createSearchParamObj(searchData);
         paramObj.offset = params.data.offset;
         paramObj.limit = params.data.limit;
