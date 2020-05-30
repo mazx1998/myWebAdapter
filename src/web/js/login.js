@@ -30,7 +30,7 @@ $(document).ready(function(){
 
     $loginButton.click(function(e){
         e.preventDefault();
-        const LOGIN_GET_REQUEST_URL = "http://localhost:8080/myWebAdapter-1.0/app/rest/login";
+        const LOGIN_GET_REQUEST_URL = UrlRequests.LOGIN_GET_REQUEST_URL;
         const $loginField = $("#loginField");
         const $passwordField = $("#passwordField");
         const btoaData = btoa($loginField.val() + ":" + $passwordField.val());

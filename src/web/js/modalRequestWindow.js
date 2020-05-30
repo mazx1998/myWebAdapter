@@ -221,7 +221,7 @@ $(document).ready(function(){
         }
     };
 
-    let CREATE_REQUEST_URL = "http://localhost:8080/myWebAdapter-1.0/app/rest/createRequest";
+    let CREATE_REQUEST_URL = UrlRequests.CREATE_REQUEST_URL;
     let BTOA_KEY = 'btoa';
 
     let sendReqButton = $("button#sendReqButton");
@@ -276,7 +276,7 @@ $(document).ready(function(){
                 first_name: $("#reqFirstName").val().toUpperCase(),
                 family_name: $("#reqFamilyName").val().toUpperCase()
             };
-            if (patronymicCheckField.checked) {
+            if ($("#reqPatronymic").val().trim()) {
                 request.patronymic = $("#reqPatronymic").val().toUpperCase();
             }
             request.gender = $('#reqGender').children("option:selected").html().toUpperCase();
