@@ -5,17 +5,16 @@ import database.entities.UsersEntity;
 import database.services.RequestService;
 import database.services.UsersService;
 import database.utils.HibernateSessionUtil;
-import restapi.authorization.Roles;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.junit.Assert;
 import org.junit.Test;
+import restapi.authorization.Roles;
 
 import java.sql.Timestamp;
-import java.util.List;
 
 public class RequestServiceImplTest {
-    private final RequestService requestServiceTest = new RequestServiceImpl();
+    /*private final RequestService requestServiceTest = new RequestServiceImpl();
     private final UsersService usersServiceTest = new UsersServiceImpl();
 
     private final UsersEntity usersEntityTest
@@ -133,5 +132,5 @@ public class RequestServiceImplTest {
     public void sandbox() {
         RequestsEntity requestsEntity = requestServiceTest.getById(15);
         System.out.println(requestsEntity.getRequestXml());
-    }
+    }*/
 }

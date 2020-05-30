@@ -5,9 +5,10 @@ import exceptions.DataBaseException;
 import restapi.authorization.Roles;
 import org.junit.Assert;
 import org.junit.Test;
+import restapi.utils.XMLParserUtil;
 
 public class UsersServiceImplTest {
-    private final UsersServiceImpl usersServiceTest = new UsersServiceImpl();
+   /* private final UsersServiceImpl usersServiceTest = new UsersServiceImpl();
     private final UsersEntity testUsersEntity
             = new UsersEntity("testLogin","testHash", Roles.USER);
 
@@ -31,8 +32,8 @@ public class UsersServiceImplTest {
     }
 
     @Test
-    public void sandbox() {
+    public void sandbox() throws Exception {
+        System.out.println(XMLParserUtil.getXmlRequest(null));
 
-        //XMLParserUtil.getRequestXML(p);
-    }
+    }*/
 }

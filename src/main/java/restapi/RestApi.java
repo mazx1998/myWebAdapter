@@ -138,7 +138,8 @@ public class RestApi {
 
         String requestXML;
         try {
-            requestXML = XMLParserUtil.getRequestXML(request);
+            requestXML = XMLParserUtil.getXmlRequest(request);
+            System.out.println(requestXML);
         } catch (Exception e) {
             e.printStackTrace();
             return Response.status(Response.Status.BAD_REQUEST).build();
